@@ -1,6 +1,6 @@
 [
   {
-    "pattern": "**/*.cs",
+    "pattern": "**/*.js",
     "allowMixedTabsAndSpaces": true
   }
 ]

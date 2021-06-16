@@ -1,7 +1,7 @@
 {
     "ql.projects" : {
         "." : {
-            "dbScheme" : "semmlecode.csharp.dbscheme",
+            "dbScheme" : "semmlecode.javascript.dbscheme",
             "libraryPath" : []
         }
     }

@@ -3,11 +3,11 @@
  * @name External dependency source links
  * @kind source-link
  * @metricType externalDependency
- * @id cs/dependency-source-links
+ * @id js/dependency-source-links
  */
 
-import semmle.code.csharp.metrics.ExternalDependencies
+import ExternalDependencies
 
-from File file, int num, string encodedDependency
-where externalDependencies(file, encodedDependency, num)
-select encodedDependency, file
+from File f, string entity
+where externalDependencies(f, _, entity, _)
+select entity, f

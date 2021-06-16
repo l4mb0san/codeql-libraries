@@ -2,21 +2,26 @@
  * @name Alert suppression
  * @description Generates information about alert suppressions.
  * @kind alert-suppression
- * @id cs/alert-suppression
+ * @id js/alert-suppression
  */
 
-import csharp
+import javascript
 
 /**
  * An alert suppression comment.
  */
-class SuppressionComment extends CommentLine {
+class SuppressionComment extends Locatable {
+  string text;
   string annotation;
 
   SuppressionComment() {
-    // Must be either `// ...` or `/* ... */` on a single line.
-    this.getRawText().regexpMatch("//.*|/\\*.*\\*/") and
-    exists(string text | text = this.getText() |
+    (
+      text = this.(Comment).getText() or
+      text = this.(HTML::CommentNode).getText()
+    ) and
+    // suppression comments must be single-line
+    not text.matches("%\n%") and
+    (
       // match `lgtm[...]` anywhere in the comment
       annotation = text.regexpFind("(?i)\\blgtm\\s*\\[[^\\]]*\\]", _, _)
       or
@@ -24,6 +29,9 @@ class SuppressionComment extends CommentLine {
       annotation = text.regexpFind("(?i)(?<=^|;)\\s*lgtm(?!\\B|\\s*\\[)", _, _).trim()
     )
   }
+
+  /** Gets the text of this suppression comment, not including delimiters. */
+  string getText() { result = text }
 
   /** Gets the suppression annotation in this comment. */
   string getAnnotation() { result = annotation }
@@ -44,7 +52,7 @@ class SuppressionComment extends CommentLine {
 /**
  * The scope of an alert suppression comment.
  */
-class SuppressionScope extends @commentline {
+class SuppressionScope extends @locatable {
   SuppressionScope() { this instanceof SuppressionComment }
 
   /** Gets a suppression comment with this scope. */
