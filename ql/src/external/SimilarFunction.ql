@@ -1,25 +1,22 @@
 /**
  * @deprecated
  * @name Similar function
- * @description There is another function that shares a lot of code with this function.
- *              Extract the common parts to a shared utility function to improve maintainability.
+ * @description There is another function that is very similar this one. Extract the common code to a common function to improve sharing.
  * @kind problem
- * @problem.severity recommendation
- * @id js/similar-function
  * @tags testability
  *       maintainability
  *       useless-code
+ *       duplicate-code
  *       statistical
  *       non-attributable
- *       duplicate-code
- * @precision medium
+ * @problem.severity recommendation
+ * @sub-severity low
+ * @precision very-high
+ * @id py/similar-function
  */
 
-import javascript
-import semmle.javascript.RestrictedLocations
+import python
 
-from Function f, Function g, float percent
+from Function m, Function other, string message
 where none()
-select f.(FirstLineOf),
-  percent.floor() + "% of statements in " + f.describe() + " are similar to statements in $@.",
-  g.(FirstLineOf), g.describe()
+select m, message, other, other.getName()

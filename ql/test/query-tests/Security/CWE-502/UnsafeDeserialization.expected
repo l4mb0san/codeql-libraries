@@ -1,23 +1,18 @@
-nodes
-| tst.js:7:22:7:36 | req.params.data |
-| tst.js:7:22:7:36 | req.params.data |
-| tst.js:7:22:7:36 | req.params.data |
-| tst.js:8:25:8:39 | req.params.data |
-| tst.js:8:25:8:39 | req.params.data |
-| tst.js:8:25:8:39 | req.params.data |
-| tst.js:12:26:12:40 | req.params.data |
-| tst.js:12:26:12:40 | req.params.data |
-| tst.js:12:26:12:40 | req.params.data |
-| tst.js:13:29:13:43 | req.params.data |
-| tst.js:13:29:13:43 | req.params.data |
-| tst.js:13:29:13:43 | req.params.data |
 edges
-| tst.js:7:22:7:36 | req.params.data | tst.js:7:22:7:36 | req.params.data |
-| tst.js:8:25:8:39 | req.params.data | tst.js:8:25:8:39 | req.params.data |
-| tst.js:12:26:12:40 | req.params.data | tst.js:12:26:12:40 | req.params.data |
-| tst.js:13:29:13:43 | req.params.data | tst.js:13:29:13:43 | req.params.data |
+| unsafe_deserialization.py:14:15:14:21 | ControlFlowNode for request | unsafe_deserialization.py:14:15:14:26 | ControlFlowNode for Attribute |
+| unsafe_deserialization.py:14:15:14:26 | ControlFlowNode for Attribute | unsafe_deserialization.py:15:18:15:24 | ControlFlowNode for payload |
+| unsafe_deserialization.py:14:15:14:26 | ControlFlowNode for Attribute | unsafe_deserialization.py:16:15:16:21 | ControlFlowNode for payload |
+| unsafe_deserialization.py:14:15:14:26 | ControlFlowNode for Attribute | unsafe_deserialization.py:18:19:18:25 | ControlFlowNode for payload |
+| unsafe_deserialization.py:14:15:14:26 | ControlFlowNode for Attribute | unsafe_deserialization.py:21:16:21:22 | ControlFlowNode for payload |
+nodes
+| unsafe_deserialization.py:14:15:14:21 | ControlFlowNode for request | semmle.label | ControlFlowNode for request |
+| unsafe_deserialization.py:14:15:14:26 | ControlFlowNode for Attribute | semmle.label | ControlFlowNode for Attribute |
+| unsafe_deserialization.py:15:18:15:24 | ControlFlowNode for payload | semmle.label | ControlFlowNode for payload |
+| unsafe_deserialization.py:16:15:16:21 | ControlFlowNode for payload | semmle.label | ControlFlowNode for payload |
+| unsafe_deserialization.py:18:19:18:25 | ControlFlowNode for payload | semmle.label | ControlFlowNode for payload |
+| unsafe_deserialization.py:21:16:21:22 | ControlFlowNode for payload | semmle.label | ControlFlowNode for payload |
 #select
-| tst.js:7:22:7:36 | req.params.data | tst.js:7:22:7:36 | req.params.data | tst.js:7:22:7:36 | req.params.data | Unsafe deserialization of $@. | tst.js:7:22:7:36 | req.params.data | user input |
-| tst.js:8:25:8:39 | req.params.data | tst.js:8:25:8:39 | req.params.data | tst.js:8:25:8:39 | req.params.data | Unsafe deserialization of $@. | tst.js:8:25:8:39 | req.params.data | user input |
-| tst.js:12:26:12:40 | req.params.data | tst.js:12:26:12:40 | req.params.data | tst.js:12:26:12:40 | req.params.data | Unsafe deserialization of $@. | tst.js:12:26:12:40 | req.params.data | user input |
-| tst.js:13:29:13:43 | req.params.data | tst.js:13:29:13:43 | req.params.data | tst.js:13:29:13:43 | req.params.data | Unsafe deserialization of $@. | tst.js:13:29:13:43 | req.params.data | user input |
+| unsafe_deserialization.py:15:18:15:24 | ControlFlowNode for payload | unsafe_deserialization.py:14:15:14:21 | ControlFlowNode for request | unsafe_deserialization.py:15:18:15:24 | ControlFlowNode for payload | Deserializing of $@. | unsafe_deserialization.py:14:15:14:21 | ControlFlowNode for request | untrusted input |
+| unsafe_deserialization.py:16:15:16:21 | ControlFlowNode for payload | unsafe_deserialization.py:14:15:14:21 | ControlFlowNode for request | unsafe_deserialization.py:16:15:16:21 | ControlFlowNode for payload | Deserializing of $@. | unsafe_deserialization.py:14:15:14:21 | ControlFlowNode for request | untrusted input |
+| unsafe_deserialization.py:18:19:18:25 | ControlFlowNode for payload | unsafe_deserialization.py:14:15:14:21 | ControlFlowNode for request | unsafe_deserialization.py:18:19:18:25 | ControlFlowNode for payload | Deserializing of $@. | unsafe_deserialization.py:14:15:14:21 | ControlFlowNode for request | untrusted input |
+| unsafe_deserialization.py:21:16:21:22 | ControlFlowNode for payload | unsafe_deserialization.py:14:15:14:21 | ControlFlowNode for request | unsafe_deserialization.py:21:16:21:22 | ControlFlowNode for payload | Deserializing of $@. | unsafe_deserialization.py:14:15:14:21 | ControlFlowNode for request | untrusted input |

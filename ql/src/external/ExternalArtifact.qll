@@ -2,7 +2,36 @@
  * Provides classes for working with external data.
  */
 
-import semmle.javascript.Locations
+import python
+
+class ExternalDefect extends @externalDefect {
+  string getQueryPath() {
+    exists(string path |
+      externalDefects(this, path, _, _, _) and
+      result = path.replaceAll("\\", "/")
+    )
+  }
+
+  string getMessage() { externalDefects(this, _, _, result, _) }
+
+  float getSeverity() { externalDefects(this, _, _, _, result) }
+
+  Location getLocation() { externalDefects(this, _, result, _, _) }
+
+  /** Gets a textual representation of this element. */
+  string toString() { result = getQueryPath() + ": " + getLocation() + " - " + getMessage() }
+}
+
+class ExternalMetric extends @externalMetric {
+  string getQueryPath() { externalMetrics(this, result, _, _) }
+
+  float getValue() { externalMetrics(this, _, _, result) }
+
+  Location getLocation() { externalMetrics(this, _, result, _) }
+
+  /** Gets a textual representation of this element. */
+  string toString() { result = getQueryPath() + ": " + getLocation() + " - " + getValue() }
+}
 
 /**
  * An external data item.
@@ -20,71 +49,31 @@ class ExternalData extends @externalDataElement {
   /** Gets the number of fields in this data item. */
   int getNumFields() { result = 1 + max(int i | externalData(this, _, i, _) | i) }
 
-  /** Gets the value of the `i`th field of this data item. */
-  string getField(int i) { externalData(this, _, i, result) }
+  /** Gets the value of the field at position `index` of this data item. */
+  string getField(int index) { externalData(this, _, index, result) }
 
-  /** Gets the integer value of the `i`th field of this data item. */
-  int getFieldAsInt(int i) { result = getField(i).toInt() }
+  /** Gets the integer value of the field at position `index` of this data item. */
+  int getFieldAsInt(int index) { result = getField(index).toInt() }
 
-  /** Gets the floating-point value of the `i`th field of this data item. */
-  float getFieldAsFloat(int i) { result = getField(i).toFloat() }
+  /** Gets the floating-point value of the field at position `index` of this data item. */
+  float getFieldAsFloat(int index) { result = getField(index).toFloat() }
 
-  /** Gets the value of the `i`th field of this data item, interpreted as a date. */
-  date getFieldAsDate(int i) { result = getField(i).toDate() }
+  /** Gets the value of the field at position `index` of this data item, interpreted as a date. */
+  date getFieldAsDate(int index) { result = getField(index).toDate() }
 
   /** Gets a textual representation of this data item. */
   string toString() { result = getQueryPath() + ": " + buildTupleString(0) }
 
-  /** Gets a textual representation of this data item, starting with the `n`th field. */
-  private string buildTupleString(int n) {
-    n = getNumFields() - 1 and result = getField(n)
+  /** Gets a textual representation of this data item, starting with the field at position `start`. */
+  private string buildTupleString(int start) {
+    start = getNumFields() - 1 and result = getField(start)
     or
-    n < getNumFields() - 1 and result = getField(n) + "," + buildTupleString(n + 1)
+    start < getNumFields() - 1 and result = getField(start) + "," + buildTupleString(start + 1)
   }
 }
 
 /**
- * An external data item interpreted as an error or warning reported by an external tool.
- */
-class ExternalError extends ExternalData {
-  /** Gets the name of the tool that reported the error. */
-  string getReporter() { result = getField(0) }
-
-  /** Gets the absolute path of the file in which the error occurs. */
-  string getPath() { result = getField(1) }
-
-  /** Gets the reported line of the error. */
-  int getLine() { result = getFieldAsInt(2) }
-
-  /** Gets the reported column of the error. */
-  int getColumn() { result = getFieldAsInt(3) }
-
-  /**
-   * Gets the error type.
-   *
-   * This is tool-specific, but usually either "warning" or "error".
-   */
-  string getType() { result = getField(4) }
-
-  /** Gets the error message. */
-  string getMessage() { result = getField(5) }
-
-  /** Gets the file associated with this error. */
-  File getFile() { result.getAbsolutePath() = this.getPath() }
-
-  /** Gets the URL associated with this error. */
-  string getURL() {
-    exists(string path, int line, int col |
-      path = this.getPath() and
-      line = this.getLine() and
-      col = this.getColumn() and
-      toUrl(path, line, col, line, col, result)
-    )
-  }
-}
-
-/**
- * An external data item with a location and a message.
+ * External data with a location, and a message, as produced by tools that used to produce QLDs.
  */
 class DefectExternalData extends ExternalData {
   DefectExternalData() {
@@ -92,9 +81,7 @@ class DefectExternalData extends ExternalData {
     this.getNumFields() = 2
   }
 
-  /** Gets the URL associated with this data item. */
   string getURL() { result = getField(0) }
 
-  /** Gets the message associated with this data item. */
   string getMessage() { result = getField(1) }
 }

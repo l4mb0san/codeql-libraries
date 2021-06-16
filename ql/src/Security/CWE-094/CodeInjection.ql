@@ -1,24 +1,25 @@
 /**
  * @name Code injection
- * @description Interpreting unsanitized user input as code allows a malicious user arbitrary
+ * @description Interpreting unsanitized user input as code allows a malicious user to perform arbitrary
  *              code execution.
  * @kind path-problem
  * @problem.severity error
- * @security-severity 2.9
+ * @security-severity 10.0
+ * @sub-severity high
  * @precision high
- * @id js/code-injection
+ * @id py/code-injection
  * @tags security
+ *       external/owasp/owasp-a1
  *       external/cwe/cwe-094
- *       external/cwe/cwe-079
+ *       external/cwe/cwe-095
  *       external/cwe/cwe-116
  */
 
-import javascript
-import semmle.javascript.security.dataflow.CodeInjection::CodeInjection
+import python
+import semmle.python.security.dataflow.CodeInjection
 import DataFlow::PathGraph
 
-from Configuration cfg, DataFlow::PathNode source, DataFlow::PathNode sink
-where cfg.hasFlowPath(source, sink)
-select sink.getNode(), source, sink,
-  "$@ flows to " + sink.getNode().(Sink).getMessageSuffix() + ".", source.getNode(),
-  "User-provided value"
+from CodeInjectionConfiguration config, DataFlow::PathNode source, DataFlow::PathNode sink
+where config.hasFlowPath(source, sink)
+select sink.getNode(), source, sink, "$@ flows to here and is interpreted as code.",
+  source.getNode(), "A user-provided value"

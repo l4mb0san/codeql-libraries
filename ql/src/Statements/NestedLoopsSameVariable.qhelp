@@ -4,44 +4,29 @@
 <qhelp>
 <overview>
 <p>
-Nested 'for' loops with the same iteration variable are hard to understand, since
-the inner loop affects the iteration variable of the outer loop. Sometimes this
-behavior is unintended and indicates a bug.
+    In Python variables have function-wide scope which means that if two variables have the same name in the
+    same scope, they are in fact one variable. Consequently, nested loops in which the target variables have
+    the same name in fact share a single variable. Such loops are difficult to understand as the inner loop will
+    modify the target variable of the outer loop; this may be a typographical error.
 </p>
+
 
 </overview>
 <recommendation>
 
-<p>
-Use different iteration variables in both loops.
+<p>Carefully examine the code and check for possible errors,
+particularly considering what would happen if the inner or outer variable were renamed.
 </p>
 
 </recommendation>
 <example>
-
-<p>
-In this example, the outer loop iterates <code>i</code> from 0 to 10. The inner
-loop initializes <code>j</code> to the value of <code>i</code>, and then iterates
-it down to 5. Hence, the outer loop will never terminate since the inner loop
-prevents its iteration variable from reaching 10. 
-</p>
-
-<sample src="examples/NestedLoopsSameVariable.js" />
-
-<p>
-Most likely, the loop condition <code>i&gt;5</code> of the inner loop is a typo for
-<code>j&gt;5</code>, and similarly the update expression <code>--i</code> should
-be <code>--j</code>:
-</p>
-
-<sample src="examples/NestedLoopsSameVariableGood.js" />
+<sample src="NestedLoopsSameVariable.py" />
 
 </example>
 <references>
 
-
-<li>Ecma International, <i>ECMAScript Language Definition</i>, 5.1 Edition, Section 12.6.3. ECMA, 2011.</li>
-
+  <li>Python Language Reference: <a href="http://docs.python.org/2/reference/compound_stmts.html#the-for-statement">The for statement</a>.</li>
+  <li>Python Tutorial: <a href="http://docs.python.org/2/tutorial/controlflow.html#for-statements">for statements</a>.</li>
 
 </references>
 </qhelp>

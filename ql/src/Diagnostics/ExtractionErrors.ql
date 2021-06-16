@@ -1,18 +1,23 @@
 /**
- * @name Extraction errors
- * @description List all extraction errors for files in the source code directory.
+ * @name Python extraction errors
+ * @description List all extraction errors for Python files in the source code directory.
  * @kind diagnostic
- * @id js/diagnostics/extraction-errors
+ * @id py/diagnostics/extraction-errors
  */
 
-import javascript
+import python
 
-/** Gets the SARIF severity to associate an error. */
-int getSeverity() { result = 2 }
+/**
+ * Gets the SARIF severity for errors.
+ *
+ * See point 3.27.10 in https://docs.oasis-open.org/sarif/sarif/v2.0/sarif-v2.0.html for
+ * what error means.
+ */
+int getErrorSeverity() { result = 2 }
 
-from Error error
+from SyntaxError error, File file
 where
-  exists(error.getFile().getRelativePath()) and
-  error.isFatal()
-select error, "Extraction failed in " + error.getFile() + " with error " + error.getMessage(),
-  getSeverity()
+  file = error.getFile() and
+  exists(file.getRelativePath())
+select error, "Extraction failed in " + file + " with error " + error.getMessage(),
+  getErrorSeverity()

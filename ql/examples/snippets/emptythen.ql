@@ -1,8 +1,8 @@
 /**
- * @id js/examples/emptythen
+ * @id py/examples/emptythen
  * @name If statements with empty then branch
- * @description Finds 'if' statements where the 'then' branch is
- *              an empty block statement
+ * @description Finds 'if' statements where the "then" branch
+ *              consists entirely of Pass statements
  * @tags if
  *       then
  *       empty
@@ -10,8 +10,12 @@
  *       branch
  */
 
-import javascript
+import python
 
-from IfStmt i
-where i.getThen().(BlockStmt).getNumStmt() = 0
+from If i
+where
+  not exists(Stmt s |
+    i.getStmt(_) = s and
+    not s instanceof Pass
+  )
 select i

@@ -1,25 +1,22 @@
 /**
  * @deprecated
  * @name Duplicate function
- * @description There is another function that shares a lot of code with this function.
- *              Extract the common parts to a shared utility function to improve maintainability.
+ * @description There is another identical implementation of this function. Extract the code to a common file or superclass to improve sharing.
  * @kind problem
- * @problem.severity recommendation
- * @id js/duplicate-function
  * @tags testability
  *       useless-code
  *       maintainability
+ *       duplicate-code
  *       statistical
  *       non-attributable
- *       duplicate-code
- * @precision medium
+ * @problem.severity recommendation
+ * @sub-severity high
+ * @precision high
+ * @id py/duplicate-function
  */
 
-import javascript
-import semmle.javascript.RestrictedLocations
+import python
 
-from Function f, Function g, float percent
+from Function m, Function other, string message
 where none()
-select f.(FirstLineOf),
-  percent.floor() + "% of statements in " + f.describe() + " are duplicated in $@.",
-  g.(FirstLineOf), g.describe()
+select m, message, other, other.getName()

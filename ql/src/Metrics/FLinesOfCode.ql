@@ -1,17 +1,17 @@
 /**
  * @name Lines of code in files
  * @kind treemap
- * @description Measures the number of lines of code in each file, ignoring lines that
- *              contain only comments or whitespace.
+ * @description Measures the number of lines of code in each file (ignoring lines that
+ *              contain only docstrings, comments or are blank).
  * @treemap.warnOn highValues
  * @metricType file
  * @metricAggregate avg sum max
- * @id js/lines-of-code-in-files
  * @tags maintainability
+ * @id py/lines-of-code-in-files
  */
 
-import javascript
+import python
 
-from File f, int n
-where n = f.getNumberOfLinesOfCode()
-select f, n order by n desc
+from Module m, int n
+where n = m.getMetrics().getNumberOfLinesOfCode()
+select m, n order by n desc

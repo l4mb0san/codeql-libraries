@@ -2,87 +2,36 @@
   "-//Semmle//qhelp//EN"
   "qhelp.dtd">
 <qhelp>
+
+
 <overview>
-<p>
-Comparing two identical expressions typically indicates a mistake such as a missing
-<code>this</code> qualifier or a misspelled variable name. The only case where such
-a comparison makes semantic sense is when determining whether a value is
-<code>NaN</code>, since <code>NaN</code> does not compare as equal to itself. But
-even in this case clearer alternatives are available.
+<p>When two identical expressions are compared it is typically an
+indication of a mistake, since the Boolean value of the comparison
+will always be the same, unless the value is the floating point value <code>float('nan')</code>.
 </p>
 
 </overview>
 <recommendation>
 
-<p>
-Carefully inspect the comparison to determine whether it is a symptom of a bug.
-If the comparison is used to check for <code>NaN</code>, consider using the
-<code>isNaN</code> function from the standard library instead.
+<p>It is not good practice to compare a value with itself, as it makes the code hard to read
+and can hide errors with classes that do not correctly implement equality.
+If testing whether a floating-point value is not-a-number, then use <code>math.isnan()</code>.
+If the value may be a complex number, then use <code>cmath.isnan()</code> instead.
 </p>
 
 </recommendation>
 <example>
 
-<p>
-In the example below, the method <code>Rectangle.prototype.contains</code> is intended
-to check whether a point <code>(x, y)</code> lies inside a rectangle given by its
-origin <code>(this.x, this.y)</code>, its width <code>this.width</code>, and its
-height <code>this.height</code>.
-</p>
-
-<sample src="examples/CompareIdenticalValues.js" />
-
-<p>
-Note, however, that on line 11 the programmer forgot to qualify <code>this.y</code>,
-thus ending up comparing the argument <code>y</code> against itself. The comparison
-should be fixed accordingly:
-</p>
-
-<sample src="examples/CompareIdenticalValuesGood.js" />
-
-<p>
-A common use of self-comparison is to detect <code>NaN</code> values, which are the only
-kind of values that are not considered equal to themselves:
-</p>
-
-<sample language="javascript">
-function eq(x, y) {
-  // check if x is NaN
-  if (x !== x) {
-    // consider NaN to be equal to itself
-    return y !== y;
-  }
-  return x === y;
-}
-</sample>
-
-<p>
-In cases like this one, it is clearer to use the <code>isNaN</code> function from
-the standard library:
-</p>
-
-<sample language="javascript">
-function eq(x, y) {
-  // check if x is NaN
-  if (isNaN(x)) {
-    // consider NaN to be equal to itself
-    return isNaN(y);
-  }
-  return x === y;
-}
-</sample>
-
-<p>
-If you do not want to rely on <code>isNaN</code> being defined, you can provide your
-own implementation: self-comparisons in functions named <code>isNaN</code>
-(regardless of capitalization) are treated specially and will not be flagged.
-</p>
+<p>In this example <code>f == f</code> is used to check for <code>float('nan')</code>.
+This makes the code difficult to understand as the reader may not be immediately familiar with this pattern.
+</p><sample src="CompareIdenticalValues.py" />
 
 </example>
 <references>
 
-
-<li>Mozilla Developer Network: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN">NaN</a>.</li>
+<li>Python Language Reference: <a href="http://docs.python.org/2/reference/expressions.html#not-in">Comparisons</a>.</li>
+<li>Python Library Reference: <a href="https://docs.python.org/2/library/math.html#math.isnan">math.isnan()</a>.</li>
+<li>Python Library Reference: <a href="https://docs.python.org/2/library/cmath.html#cmath.isnan">cmath.isnan()</a>.</li>
 
 
 </references>

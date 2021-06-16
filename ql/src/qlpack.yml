@@ -1,5 +1,5 @@
-name: codeql-javascript
+name: codeql-python
 version: 0.0.0
-dbscheme: semmlecode.javascript.dbscheme
+dbscheme: semmlecode.python.dbscheme
 suites: codeql-suites
-extractor: javascript
+extractor: python

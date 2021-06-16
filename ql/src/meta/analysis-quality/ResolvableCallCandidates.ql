@@ -1,14 +1,14 @@
 /**
- * @name Resolvable call site candidates
- * @description The number of non-external calls in the program.
+ * @name Resolvable call candidates
+ * @description The number of (relevant) calls in the program.
  * @kind metric
  * @metricType project
  * @metricAggregate sum
  * @tags meta
- * @id js/meta/resolvable-call-candidates
+ * @id py/meta/resolvable-call-candidates
  */
 
-import javascript
+import python
 import CallGraphQuality
 
-select projectRoot(), count(RelevantInvoke call)
+select projectRoot(), count(RelevantCall call)

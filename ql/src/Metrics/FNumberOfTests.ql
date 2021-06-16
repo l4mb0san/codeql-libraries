@@ -1,15 +1,16 @@
 /**
  * @name Number of tests
- * @description The number of tests defined in a file.
+ * @description The number of test methods defined in a module
  * @kind treemap
  * @treemap.warnOn lowValues
  * @metricType file
  * @metricAggregate avg sum max
- * @id js/test-in-files
+ * @id py/tests-in-files
  */
 
-import semmle.javascript.frameworks.Testing
+import python
+import semmle.python.filters.Tests
 
-from File f, int n
-where n = strictcount(Test test | test.getFile() = f)
-select f, n order by n desc
+from Module m, int n
+where n = strictcount(Test test | test.getEnclosingModule() = m)
+select m.getFile(), n order by n desc

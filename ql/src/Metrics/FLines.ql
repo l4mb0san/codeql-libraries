@@ -1,15 +1,15 @@
 /**
- * @name Number of lines in files
+ * @name Number of lines
  * @description The number of lines in each file.
  * @kind treemap
+ * @id py/lines-per-file
  * @treemap.warnOn highValues
  * @metricType file
  * @metricAggregate avg sum max
- * @id js/lines-per-file
  */
 
-import javascript
+import python
 
-from File f, int n
-where n = f.getNumberOfLines()
-select f, n order by n desc
+from Module m, int n
+where n = m.getMetrics().getNumberOfLines()
+select m, n order by n desc

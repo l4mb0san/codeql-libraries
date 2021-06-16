@@ -1,34 +1,19 @@
-nodes
-| node.js:8:10:8:12 | err |
-| node.js:8:10:8:12 | err |
-| node.js:11:13:11:15 | err |
-| node.js:11:13:11:21 | err.stack |
-| node.js:11:13:11:21 | err.stack |
-| tst.js:6:12:6:12 | e |
-| tst.js:6:12:6:12 | e |
-| tst.js:7:13:7:13 | e |
-| tst.js:7:13:7:13 | e |
-| tst.js:8:15:8:15 | e |
-| tst.js:16:20:16:20 | e |
-| tst.js:17:11:17:11 | e |
-| tst.js:17:11:17:17 | e.stack |
-| tst.js:17:11:17:17 | e.stack |
 edges
-| node.js:8:10:8:12 | err | node.js:11:13:11:15 | err |
-| node.js:8:10:8:12 | err | node.js:11:13:11:15 | err |
-| node.js:11:13:11:15 | err | node.js:11:13:11:21 | err.stack |
-| node.js:11:13:11:15 | err | node.js:11:13:11:21 | err.stack |
-| tst.js:6:12:6:12 | e | tst.js:7:13:7:13 | e |
-| tst.js:6:12:6:12 | e | tst.js:7:13:7:13 | e |
-| tst.js:6:12:6:12 | e | tst.js:7:13:7:13 | e |
-| tst.js:6:12:6:12 | e | tst.js:7:13:7:13 | e |
-| tst.js:6:12:6:12 | e | tst.js:8:15:8:15 | e |
-| tst.js:6:12:6:12 | e | tst.js:8:15:8:15 | e |
-| tst.js:8:15:8:15 | e | tst.js:16:20:16:20 | e |
-| tst.js:16:20:16:20 | e | tst.js:17:11:17:11 | e |
-| tst.js:17:11:17:11 | e | tst.js:17:11:17:17 | e.stack |
-| tst.js:17:11:17:11 | e | tst.js:17:11:17:17 | e.stack |
+| test.py:23:25:23:25 | SSA variable e | test.py:24:16:24:16 | ControlFlowNode for e |
+| test.py:31:25:31:25 | SSA variable e | test.py:32:16:32:30 | ControlFlowNode for Attribute |
+| test.py:49:15:49:36 | ControlFlowNode for Attribute() | test.py:50:29:50:31 | ControlFlowNode for err |
+| test.py:50:29:50:31 | ControlFlowNode for err | test.py:50:16:50:32 | ControlFlowNode for format_error() |
+nodes
+| test.py:16:16:16:37 | ControlFlowNode for Attribute() | semmle.label | ControlFlowNode for Attribute() |
+| test.py:23:25:23:25 | SSA variable e | semmle.label | SSA variable e |
+| test.py:24:16:24:16 | ControlFlowNode for e | semmle.label | ControlFlowNode for e |
+| test.py:31:25:31:25 | SSA variable e | semmle.label | SSA variable e |
+| test.py:32:16:32:30 | ControlFlowNode for Attribute | semmle.label | ControlFlowNode for Attribute |
+| test.py:49:15:49:36 | ControlFlowNode for Attribute() | semmle.label | ControlFlowNode for Attribute() |
+| test.py:50:16:50:32 | ControlFlowNode for format_error() | semmle.label | ControlFlowNode for format_error() |
+| test.py:50:29:50:31 | ControlFlowNode for err | semmle.label | ControlFlowNode for err |
 #select
-| node.js:11:13:11:21 | err.stack | node.js:8:10:8:12 | err | node.js:11:13:11:21 | err.stack | Stack trace information from $@ may be exposed to an external user here. | node.js:8:10:8:12 | err | here |
-| tst.js:7:13:7:13 | e | tst.js:6:12:6:12 | e | tst.js:7:13:7:13 | e | Stack trace information from $@ may be exposed to an external user here. | tst.js:6:12:6:12 | e | here |
-| tst.js:17:11:17:17 | e.stack | tst.js:6:12:6:12 | e | tst.js:17:11:17:17 | e.stack | Stack trace information from $@ may be exposed to an external user here. | tst.js:6:12:6:12 | e | here |
+| test.py:16:16:16:37 | ControlFlowNode for Attribute() | test.py:16:16:16:37 | ControlFlowNode for Attribute() | test.py:16:16:16:37 | ControlFlowNode for Attribute() | $@ may be exposed to an external user | test.py:16:16:16:37 | ControlFlowNode for Attribute() | Error information |
+| test.py:24:16:24:16 | ControlFlowNode for e | test.py:23:25:23:25 | SSA variable e | test.py:24:16:24:16 | ControlFlowNode for e | $@ may be exposed to an external user | test.py:23:25:23:25 | SSA variable e | Error information |
+| test.py:32:16:32:30 | ControlFlowNode for Attribute | test.py:31:25:31:25 | SSA variable e | test.py:32:16:32:30 | ControlFlowNode for Attribute | $@ may be exposed to an external user | test.py:31:25:31:25 | SSA variable e | Error information |
+| test.py:50:16:50:32 | ControlFlowNode for format_error() | test.py:49:15:49:36 | ControlFlowNode for Attribute() | test.py:50:16:50:32 | ControlFlowNode for format_error() | $@ may be exposed to an external user | test.py:49:15:49:36 | ControlFlowNode for Attribute() | Error information |

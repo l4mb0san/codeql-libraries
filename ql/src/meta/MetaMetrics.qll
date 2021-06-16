@@ -1,11 +1,10 @@
 /**
- * Helpers to generating meta metrics, that is, metrics about the CodeQL analysis and extractor.
+ * Helpers for generating meta metrics, that is, metrics about the CodeQL analysis and extractor.
  */
 
-private import javascript
-private import semmle.javascript.dependencies.Dependencies
-private import semmle.javascript.dependencies.FrameworkLibraries
-private import semmle.javascript.frameworks.Testing
+import python
+private import semmle.python.filters.GeneratedCode
+private import semmle.python.filters.Tests
 
 /**
  * Gets the root folder of the snapshot.
@@ -14,19 +13,14 @@ private import semmle.javascript.frameworks.Testing
  */
 Folder projectRoot() { result.getRelativePath() = "" }
 
-/** A file we ignore because it is a test file or compiled/generated/bundled code. */
+/** A file we ignore because it is a test file, part of a third-party library, or compiled/generated/bundled code. */
 class IgnoredFile extends File {
   IgnoredFile() {
-    any(Test t).getFile() = this
+    any(TestScope ts).getLocation().getFile() = this
     or
-    getRelativePath().regexpMatch("(?i).*/test(case)?s?/.*")
+    this instanceof GeneratedFile
     or
-    getBaseName().regexpMatch("(?i)(.*[._\\-]|^)(min|bundle|concat|spec|tests?)\\.[a-zA-Z]+")
-    or
-    exists(TopLevel tl | tl.getFile() = this |
-      tl.isExterns()
-      or
-      tl instanceof FrameworkLibraryInstance
-    )
+    // outside source root (inspired by `Scope.inSource`)
+    not exists(this.getRelativePath())
   }
 }

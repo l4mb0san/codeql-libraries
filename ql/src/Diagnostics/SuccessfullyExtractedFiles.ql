@@ -1,14 +1,15 @@
 /**
- * @name Successfully extracted files
- * @description Lists all files in the source code directory that were extracted without encountering an error in the file.
+ * @name Successfully extracted Python files
+ * @description Lists all Python files in the source code directory that were extracted
+ *   without encountering an error.
  * @kind diagnostic
- * @id js/diagnostics/successfully-extracted-files
+ * @id py/diagnostics/successfully-extracted-files
  */
 
-import javascript
+import python
 
-from File f
+from File file
 where
-  not exists(Error e | e.isFatal() and e.getFile() = f) and
-  exists(f.getRelativePath())
-select f, ""
+  not exists(SyntaxError e | e.getFile() = file) and
+  exists(file.getRelativePath())
+select file, ""

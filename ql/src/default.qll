@@ -1,7 +1,6 @@
 /**
- * DEPRECATED: Use `javascript.qll` instead.
- *
- * Provides classes for working with JavaScript programs, as well as JSON, YAML and HTML.
+ * WARNING: Use of this module is DEPRECATED.
+ * All new queries should use `import python`.
  */
 
-import javascript
+import python

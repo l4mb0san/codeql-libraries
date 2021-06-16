@@ -1,5 +1,5 @@
 /**
- * @id js/examples/singlequotestring
+ * @id py/examples/singlequotestring
  * @name Single-quoted string literals
  * @description Finds string literals using single quotes
  * @tags string
@@ -7,8 +7,8 @@
  *       quote
  */
 
-import javascript
+import python
 
-from StringLiteral s
-where s.getRawValue().charAt(0) = "'"
+from StrConst s
+where s.getPrefix().charAt(_) = "'"
 select s

@@ -6,37 +6,33 @@
  * @problem.severity error
  * @security-severity 5.9
  * @precision high
- * @id js/clear-text-logging
+ * @id py/clear-text-logging-sensitive-data
  * @tags security
  *       external/cwe/cwe-312
  *       external/cwe/cwe-315
  *       external/cwe/cwe-359
  */
 
-import javascript
-import semmle.javascript.security.dataflow.CleartextLogging::CleartextLogging
-import DataFlow::PathGraph
+import python
+import semmle.python.security.Paths
+import semmle.python.dataflow.TaintTracking
+import semmle.python.security.SensitiveData
+import semmle.python.security.ClearText
 
-/**
- * Holds if `tl` is used in a browser environment.
- */
-predicate inBrowserEnvironment(TopLevel tl) {
-  tl instanceof InlineScript
-  or
-  tl instanceof CodeInAttribute
-  or
-  exists(GlobalVarAccess e | e.getTopLevel() = tl | e.getName() = "window")
-  or
-  exists(Module m | inBrowserEnvironment(m) |
-    tl = m.getAnImportedModule() or
-    m = tl.(Module).getAnImportedModule()
-  )
+class CleartextLoggingConfiguration extends TaintTracking::Configuration {
+  CleartextLoggingConfiguration() { this = "ClearTextLogging" }
+
+  override predicate isSource(DataFlow::Node src, TaintKind kind) {
+    src.asCfgNode().(SensitiveData::Source).isSourceOf(kind)
+  }
+
+  override predicate isSink(DataFlow::Node sink, TaintKind kind) {
+    sink.asCfgNode() instanceof ClearTextLogging::Sink and
+    kind instanceof SensitiveData
+  }
 }
 
-from Configuration cfg, DataFlow::PathNode source, DataFlow::PathNode sink
-where
-  cfg.hasFlowPath(source, sink) and
-  // ignore logging to the browser console (even though it is not a good practice)
-  not inBrowserEnvironment(sink.getNode().asExpr().getTopLevel())
-select sink.getNode(), source, sink, "Sensitive data returned by $@ is logged here.",
-  source.getNode(), source.getNode().(Source).describe()
+from CleartextLoggingConfiguration config, TaintedPathSource source, TaintedPathSink sink
+where config.hasFlowPath(source, sink)
+select sink.getSink(), source, sink, "Sensitive data returned by $@ is logged here.",
+  source.getSource(), source.getCfgNode().(SensitiveData::Source).repr()

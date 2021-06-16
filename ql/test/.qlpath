@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:qlpath xmlns:ns2="https://semmle.com/schemas/qlpath">
+<ns:qlpath xmlns:ns="https://semmle.com/schemas/qlpath">
     <librarypath>
-        <path kind="WORKSPACE">/semmlecode-javascript-queries</path>
+        <path kind="WORKSPACE">/semmlecode-python-queries</path>
     </librarypath>
-    <dbscheme kind="WORKSPACE">/semmlecode-javascript-queries/semmlecode.javascript.dbscheme</dbscheme>
-    <defaultImports>
-        <defaultImport>javascript</defaultImport>
-    </defaultImports>
-</ns2:qlpath>
+    <dbscheme>/semmlecode-python-queries/semmlecode.python.dbscheme</dbscheme>
+    <defaultImports><defaultImport>python</defaultImport></defaultImports>
+</ns:qlpath>

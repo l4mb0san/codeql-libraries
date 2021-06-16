@@ -1,24 +1,25 @@
 /**
  * @name Use of a broken or weak cryptographic algorithm
  * @description Using broken or weak cryptographic algorithms can compromise security.
- * @kind path-problem
+ * @kind problem
  * @problem.severity warning
  * @security-severity 5.2
  * @precision high
- * @id js/weak-cryptographic-algorithm
+ * @id py/weak-cryptographic-algorithm
  * @tags security
  *       external/cwe/cwe-327
  */
 
-import javascript
-import semmle.javascript.security.dataflow.BrokenCryptoAlgorithm::BrokenCryptoAlgorithm
-import semmle.javascript.security.SensitiveActions
-import DataFlow::PathGraph
+import python
+import semmle.python.Concepts
 
-from Configuration cfg, DataFlow::PathNode source, DataFlow::PathNode sink
+from Cryptography::CryptographicOperation operation, Cryptography::CryptographicAlgorithm algorithm
 where
-  cfg.hasFlowPath(source, sink) and
-  not source.getNode().asExpr() instanceof CleartextPasswordExpr // flagged by js/insufficient-password-hash
-select sink.getNode(), source, sink,
-  "Sensitive data from $@ is used in a broken or weak cryptographic algorithm.", source.getNode(),
-  source.getNode().(Source).describe()
+  algorithm = operation.getAlgorithm() and
+  algorithm.isWeak() and
+  // `Cryptography::HashingAlgorithm` and `Cryptography::PasswordHashingAlgorithm` are
+  // handled by `py/weak-sensitive-data-hashing`
+  algorithm instanceof Cryptography::EncryptionAlgorithm
+select operation,
+  "The cryptographic algorithm " + algorithm.getName() +
+    " is broken or weak, and should not be used."

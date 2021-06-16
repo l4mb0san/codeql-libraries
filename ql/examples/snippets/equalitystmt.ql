@@ -1,15 +1,14 @@
 /**
- * @id js/examples/equalitystmt
+ * @id py/examples/equalitystmt
  * @name Equalities as expression statements
- * @description Finds `==` equality expressions that form an expression statement
+ * @description Finds `==` equality expressions that form a statement
  * @tags comparison
  *       equality
- *       non-strict
  *       expression statement
  */
 
-import javascript
+import python
 
-from ExprStmt e
-where e.getExpr() instanceof EqExpr
+from ExprStmt e, Compare eq
+where e.getValue() = eq and eq.getOp(0) instanceof Eq
 select e

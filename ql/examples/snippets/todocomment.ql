@@ -1,12 +1,12 @@
 /**
- * @id js/examples/todocomment
+ * @id py/examples/todocomment
  * @name TODO comments
- * @description Finds comments containing the word TODO
+ * @description Finds comments containing the word "TODO"
  * @tags comment
  *       TODO
  */
 
-import javascript
+import python
 
 from Comment c
 where c.getText().regexpMatch("(?si).*\\bTODO\\b.*")

@@ -1,6 +1,7 @@
-import semmle.javascript.dependencies.Dependencies
-import DependencyCustomizations
+import python
+import semmle.python.dependencies.Dependencies
 
-from Dependency dep, string id, string version
-where dep.info(id, version)
-select dep, id, version
+from DependencyKind dk, AstNode src, Object target
+where dk.isADependency(src, target)
+select dk.toString(), src.getLocation().getFile().getShortName(), src.getLocation().getStartLine(),
+  src.toString(), target.toString()

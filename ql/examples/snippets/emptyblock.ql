@@ -1,14 +1,14 @@
 /**
- * @id js/examples/emptyblock
+ * @id py/examples/emptyblock
  * @name Empty blocks
- * @description Finds empty block statements
+ * @description Finds the first statement in a block consisting of nothing but Pass statements
  * @tags empty
  *       block
  *       statement
  */
 
-import javascript
+import python
 
-from BlockStmt blk
-where not exists(blk.getAStmt())
-select blk
+from StmtList blk
+where not exists(Stmt s | not s instanceof Pass)
+select blk.getItem(0)

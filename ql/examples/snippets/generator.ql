@@ -1,14 +1,12 @@
 /**
- * @id js/examples/generator
+ * @id py/examples/generator
  * @name Generator functions
  * @description Finds generator functions
  * @tags generator
  *       function
- *       ECMAScript 6
- *       ECMAScript 2015
  */
 
-import javascript
+import python
 
 from Function f
 where f.isGenerator()

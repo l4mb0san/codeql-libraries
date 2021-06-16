@@ -1,23 +1,38 @@
 /**
- * @name Clear text storage of sensitive information
+ * @name Clear-text storage of sensitive information
  * @description Sensitive information stored without encryption or hashing can expose it to an
  *              attacker.
  * @kind path-problem
  * @problem.severity error
  * @security-severity 5.9
  * @precision high
- * @id js/clear-text-storage-of-sensitive-data
+ * @id py/clear-text-storage-sensitive-data
  * @tags security
  *       external/cwe/cwe-312
  *       external/cwe/cwe-315
  *       external/cwe/cwe-359
  */
 
-import javascript
-import semmle.javascript.security.dataflow.CleartextStorage::CleartextStorage
-import DataFlow::PathGraph
+import python
+import semmle.python.security.Paths
+import semmle.python.dataflow.TaintTracking
+import semmle.python.security.SensitiveData
+import semmle.python.security.ClearText
 
-from Configuration cfg, DataFlow::PathNode source, DataFlow::PathNode sink
-where cfg.hasFlowPath(source, sink)
-select sink.getNode(), source, sink, "Sensitive data returned by $@ is stored here.",
-  source.getNode(), source.getNode().(Source).describe()
+class CleartextStorageConfiguration extends TaintTracking::Configuration {
+  CleartextStorageConfiguration() { this = "ClearTextStorage" }
+
+  override predicate isSource(DataFlow::Node src, TaintKind kind) {
+    src.asCfgNode().(SensitiveData::Source).isSourceOf(kind)
+  }
+
+  override predicate isSink(DataFlow::Node sink, TaintKind kind) {
+    sink.asCfgNode() instanceof ClearTextStorage::Sink and
+    kind instanceof SensitiveData
+  }
+}
+
+from CleartextStorageConfiguration config, TaintedPathSource source, TaintedPathSink sink
+where config.hasFlowPath(source, sink)
+select sink.getSink(), source, sink, "Sensitive data from $@ is stored here.", source.getSource(),
+  source.getCfgNode().(SensitiveData::Source).repr()

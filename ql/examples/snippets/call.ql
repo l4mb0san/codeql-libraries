@@ -1,14 +1,13 @@
 /**
- * @id js/examples/call
+ * @id py/examples/call
  * @name Calls to function
- * @description Finds function calls of the form `eval(...)`
+ * @description Finds calls to any function named "len"
  * @tags call
  *       function
- *       eval
  */
 
-import javascript
+import python
 
-from CallExpr c
-where c.getCalleeName() = "eval"
-select c
+from Value len, CallNode call
+where len.getName() = "len" and len.getACall() = call
+select call

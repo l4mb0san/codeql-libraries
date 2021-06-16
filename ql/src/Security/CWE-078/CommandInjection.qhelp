@@ -4,7 +4,7 @@
 <qhelp>
 <overview>
 <p>Code that passes user input directly to
-<code>require('child_process').exec</code>, or some other library
+<code>exec</code>, <code>eval</code>, or some other library
 routine that executes a command, allows the user to execute malicious
 code.</p>
 
@@ -12,7 +12,7 @@ code.</p>
 <recommendation>
 
 <p>If possible, use hard-coded string literals to specify the command to run
-or library to load. Instead of passing the user input directly to the
+or the library to load. Instead of passing the user input directly to the
 process or library function, examine the user input and then choose
 among hard-coded string literals.</p>
 
@@ -23,11 +23,11 @@ safe before using it.</p>
 </recommendation>
 <example>
 
-<p>The following example shows code that takes a shell script that can be changed
-maliciously by a user, and passes it straight to <code>child_process.exec</code>
-without examining it first.</p>
+<p>The following example shows two functions. The first is unsafe as it takes a shell script that can be changed
+by a user, and passes it straight to <code>subprocess.call()</code> without examining it first. 
+The second is safe as it selects the command from a predefined allowlist.</p>
 
-<sample src="examples/command-injection.js" />
+<sample src="examples/command_injection.py" />
 
 </example>
 <references>
@@ -36,9 +36,6 @@ without examining it first.</p>
 OWASP:
 <a href="https://www.owasp.org/index.php/Command_Injection">Command Injection</a>.
 </li>
-
-<!--  LocalWords:  CWE untrusted unsanitized Runtime
- -->
 
 </references>
 </qhelp>

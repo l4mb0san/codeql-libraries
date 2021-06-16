@@ -1,12 +1,13 @@
 /**
- * @id js/summary/lines-of-code
- * @name Total lines of JavaScript and TypeScript code in the database
- * @description The total number of lines of JavaScript or TypeScript code across all files checked into the repository, except in `node_modules`. This is a useful metric of the size of a database. For all files that were seen during extraction, this query counts the lines of code, excluding whitespace or comments.
+ * @name Total lines of Python code in the database
+ * @description The total number of lines of Python code across all files, including
+ *   external libraries and auto-generated files. This is a useful metric of the size of a
+ *   database. This query counts the lines of code, excluding whitespace or comments.
  * @kind metric
  * @tags summary
- *       lines-of-code
+ * @id py/summary/lines-of-code
  */
 
-import javascript
+import python
 
-select sum(File f | not f.getATopLevel().isExterns() | f.getNumberOfLinesOfCode())
+select sum(Module m | | m.getMetrics().getNumberOfLinesOfCode())

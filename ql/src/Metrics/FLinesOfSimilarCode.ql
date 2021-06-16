@@ -1,20 +1,17 @@
 /**
  * @deprecated
  * @name Similar lines in files
- * @description The number of lines in a file (including code, comment and whitespace lines)
- *              occurring in a block of lines that is similar to a block of lines seen
- *              somewhere else.
+ * @description The number of lines in a file, including code, comment and whitespace lines,
+ *              which are similar in at least one other place.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType file
  * @metricAggregate avg sum max
- * @id js/similar-lines-in-files
  * @tags testability
- *       duplicate-code
- *       non-attributable
+ * @id py/similar-lines-in-files
  */
 
-import javascript
+import python
 
 from File f, int n
 where none()

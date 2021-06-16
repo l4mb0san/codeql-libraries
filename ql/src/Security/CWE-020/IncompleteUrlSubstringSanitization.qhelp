@@ -3,86 +3,83 @@
 "qhelp.dtd">
 <qhelp>
 
-	<overview>
-		<p>
+    <overview>
+        <p>
 
-			Sanitizing untrusted URLs is an important technique for
-			preventing attacks such as request forgeries and malicious
-			redirections. Usually, this is done by checking that the host of a URL
-			is in a set of allowed hosts.
+            Sanitizing untrusted URLs is a common technique for
+            preventing attacks such as request forgeries and malicious
+            redirections. Usually, this is done by checking that the host of a URL
+            is in a set of allowed hosts.
 
-		</p>
+        </p>
 
-		<p>
+        <p>
+            However, treating the URL as a string and checking if one of the
+            allowed hosts is a substring of the URL is very prone to errors.
+            Malicious URLs can bypass such security checks by embedding one
+            of the allowed hosts in an unexpected location.
 
-			However, treating the URL as a string and checking if one of the
-			allowed hosts is a substring of the URL is very prone to errors.
-			Malicious URLs can bypass such security checks by embedding one
-			of the allowed hosts in an unexpected location.
+        </p>
 
-		</p>
+        <p>
 
-		<p>
+            Even if the substring check is not used in a
+            security-critical context, the incomplete check may still cause
+            undesirable behaviors when the check succeeds accidentally.
 
-			Even if the substring check is not used in a
-			security-critical context, the incomplete check may still cause
-			undesirable behaviors when the check succeeds accidentally.
+        </p>
+    </overview>
 
-		</p>
-	</overview>
+    <recommendation>
+        <p>
 
-	<recommendation>
-		<p>
+            Parse a URL before performing a check on its host value,
+            and ensure that the check handles arbitrary subdomain sequences
+            correctly.
 
-			Parse a URL before performing a check on its host value,
-			and ensure that the check handles arbitrary subdomain sequences
-			correctly.
+        </p>
+    </recommendation>
 
-		</p>
-	</recommendation>
+    <example>
 
-	<example>
+        <p>
 
-		<p>
+            The following example code checks that a URL redirection
+            will reach the <code>example.com</code> domain.
 
-			The following example code checks that a URL redirection
-			will reach the <code>example.com</code> domain, or one of its
-			subdomains, and not some malicious site.
+        </p>
 
-		</p>
+        <sample src="examples/IncompleteUrlSubstringSanitization.py"/>
 
-		<sample src="examples/IncompleteUrlSubstringSanitization_BAD1.js"/>
+        <p>
 
-		<p>
+            The first two examples show unsafe checks that are easily bypassed.
+            In <code>unsafe1</code> the attacker can simply add 
+            <code>example.com</code> anywhere in the url. For example,
+            <code>http://evil-example.net/example.com</code>.
+        </p>
+        <p>
+            In <code>unsafe2</code> the attacker must use a hostname ending in
+            <code>example.com</code>, but that is easy to do.  For example,
+            <code>http://benign-looking-prefix-example.com</code>.
 
-			The substring check is, however, easy to bypass. For example
-			by embedding <code>example.com</code> in the path component:
-			<code>http://evil-example.net/example.com</code>, or in the query
-			string component: <code>http://evil-example.net/?x=example.com</code>.
+        </p>
 
-			Address these shortcomings by checking the host of the parsed URL instead:
+        <p>
 
-		</p>
+            The second two examples show safe checks.
+            In <code>safe1</code>, an allowlist is used. Although fairly inflexible,
+            this is easy to get right and is most likely to be safe.
+        </p>
+        <p>
+            In <code>safe2</code>, <code>urlparse</code> is used to parse the URL,
+            then the hostname is checked to make sure it ends with <code>.example.com</code>.
+        </p>
 
-		<sample src="examples/IncompleteUrlSubstringSanitization_BAD2.js"/>
+    </example>
 
-		<p>
-
-			This is still not a sufficient check as the
-			following URLs bypass it: <code>http://evil-example.com</code>
-			<code>http://example.com.evil-example.net</code>.
-
-			Instead, use an explicit whitelist of allowed hosts to
-			make the redirect secure:
-
-		</p>
-
-		<sample src="examples/IncompleteUrlSubstringSanitization_GOOD.js"/>
-
-	</example>
-
-	<references>
-		<li>OWASP: <a href="https://www.owasp.org/index.php/Server_Side_Request_Forgery">SSRF</a></li>
-		<li>OWASP: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">XSS Unvalidated Redirects and Forwards Cheat Sheet</a>.</li>
-	</references>
+    <references>
+        <li>OWASP: <a href="https://www.owasp.org/index.php/Server_Side_Request_Forgery">SSRF</a></li>
+        <li>OWASP: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">XSS Unvalidated Redirects and Forwards Cheat Sheet</a>.</li>
+    </references>
 </qhelp>
