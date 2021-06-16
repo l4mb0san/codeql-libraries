@@ -3,22 +3,11 @@
  * in the code viewer.
  */
 
-import cpp
+import csharp
 import IDEContextual
 
-/**
- * Any element that might be the source or target of a jump-to-definition
- * link.
- *
- * In some cases it is preferable to modify locations (the
- * `hasLocationInfo()` predicate) so that they are short, and
- * non-overlapping with other locations that might be highlighted in
- * the LGTM interface.
- *
- * We need to give locations that may not be in the database, so
- * we use `hasLocationInfo()` rather than `getLocation()`.
- */
-class Top extends Element {
+/** An element with an associated definition. */
+abstract class Use extends @type_mention_parent {
   /**
    * Holds if this element is at the specified location.
    * The location spans column `startcolumn` of line `startline` to
@@ -26,185 +15,183 @@ class Top extends Element {
    * For more information, see
    * [Locations](https://help.semmle.com/QL/learn-ql/ql/locations.html).
    */
-  pragma[noopt]
-  final predicate hasLocationInfo(
+  predicate hasLocationInfo(
     string filepath, int startline, int startcolumn, int endline, int endcolumn
   ) {
-    interestingElement(this) and
-    not this instanceof MacroAccess and
-    not this instanceof Include and
     exists(Location l |
-      l = this.getLocation() and
-      l.hasLocationInfo(filepath, startline, startcolumn, endline, endcolumn)
+      l = this.(Element).getLocation() or
+      l = this.(TypeMention).getLocation()
+    |
+      filepath = l.getFile().getAbsolutePath() and
+      startline = l.getStartLine() and
+      startcolumn = l.getStartColumn() and
+      endline = l.getEndLine() and
+      endcolumn = l.getEndColumn()
     )
-    or
-    // This has a location that covers only the name of the accessed
-    // macro, not its arguments (which are included by `MacroAccess`'s
-    // `getLocation()`).
-    exists(Location l, MacroAccess ma |
-      ma instanceof MacroAccess and
-      ma = this and
-      l = ma.getLocation() and
-      l.hasLocationInfo(filepath, startline, startcolumn, _, _) and
-      endline = startline and
-      exists(string macroName, int nameLength, int nameLengthMinusOne |
-        macroName = ma.getMacroName() and
-        nameLength = macroName.length() and
-        nameLengthMinusOne = nameLength - 1 and
-        endcolumn = startcolumn + nameLengthMinusOne
+  }
+
+  /** Gets the definition associated with this element. */
+  abstract Declaration getDefinition();
+
+  /**
+   * Gets the type of use.
+   *
+   * - `"M"`: call.
+   * - `"V"`: variable use.
+   * - `"T"`: type reference.
+   */
+  abstract string getUseType();
+
+  /** Gets a textual representation of this element. */
+  abstract string toString();
+}
+
+/** A method call/access. */
+private class MethodUse extends Use, QualifiableExpr {
+  MethodUse() {
+    this instanceof MethodCall or
+    this instanceof MethodAccess
+  }
+
+  /** Gets the qualifier of this method use, if any. */
+  private Expr getFormatQualifier() {
+    (
+      if this.getQualifiedDeclaration().(Method).isExtensionMethod()
+      then result = this.(MethodCall).getArgument(0)
+      else result = this.getQualifier()
+    ) and
+    not result.isImplicit()
+  }
+
+  override predicate hasLocationInfo(
+    string filepath, int startline, int startcolumn, int endline, int endcolumn
+  ) {
+    Use.super.hasLocationInfo(filepath, _, _, _, _) and
+    endline = startline and
+    endcolumn = startcolumn + this.getQualifiedDeclaration().getName().length() - 1 and
+    (
+      exists(Location ql | ql = this.getFormatQualifier().getLocation() |
+        startline = ql.getEndLine() and
+        startcolumn = ql.getEndColumn() + 2
+      )
+      or
+      not exists(this.getFormatQualifier()) and
+      exists(Location l | l = this.getLocation() |
+        startline = l.getStartLine() and
+        startcolumn = l.getStartColumn()
       )
     )
-    or
-    hasLocationInfo_Include(this, filepath, startline, startcolumn, endline, endcolumn)
   }
+
+  override Method getDefinition() { result = getQualifiedDeclaration().getUnboundDeclaration() }
+
+  override string getUseType() { result = "M" }
+
+  override string toString() { result = this.(Expr).toString() }
 }
 
-/**
- * An `Include` with a `hasLocationInfo` predicate.
- *
- * This has a location that covers only the name of the included
- * file, not the `#include` text or whitespace before it.
- */
-predicate hasLocationInfo_Include(Include i, string path, int sl, int sc, int el, int ec) {
-  exists(Location l |
-    l = i.getLocation() and
-    path = l.getFile().getAbsolutePath() and
-    sl = l.getEndLine() and
-    sc = l.getEndColumn() + 1 - i.getIncludeText().length() and
-    el = l.getEndLine() and
-    ec = l.getEndColumn()
-  )
+/** An access. */
+private class AccessUse extends Access, Use {
+  AccessUse() {
+    not this.getTarget().(Parameter).getCallable() instanceof Accessor and
+    not this = any(LocalVariableDeclAndInitExpr d).getLValue() and
+    not this.isImplicit() and
+    not this instanceof MethodAccess and // handled by `MethodUse`
+    not this instanceof TypeAccess and // handled by `TypeMentionUse`
+    not this.(FieldAccess).getParent() instanceof Field and // Enum initializer
+    not this.(FieldAccess).getParent().getParent() instanceof Field and // Field initializer
+    not this.(PropertyAccess).getParent().getParent() instanceof Property // Property initializer
+  }
+
+  /** Gets the qualifier of this acccess, if any. */
+  private Expr getFormatQualifier() {
+    result = this.(QualifiableExpr).getQualifier() and
+    not result.isImplicit()
+  }
+
+  override predicate hasLocationInfo(
+    string filepath, int startline, int startcolumn, int endline, int endcolumn
+  ) {
+    exists(Location ql | ql = this.getFormatQualifier().getLocation() |
+      startline = ql.getEndLine() and
+      startcolumn = ql.getEndColumn() + 2 and
+      Use.super.hasLocationInfo(filepath, _, _, endline, endcolumn)
+    )
+    or
+    not exists(this.getFormatQualifier()) and
+    Use.super.hasLocationInfo(filepath, startline, startcolumn, endline, endcolumn)
+  }
+
+  override Declaration getDefinition() { result = this.getTarget().getUnboundDeclaration() }
+
+  override string getUseType() {
+    if this instanceof Call or this instanceof LocalFunctionAccess
+    then result = "M"
+    else
+      if this instanceof BaseAccess or this instanceof ThisAccess
+      then result = "T"
+      else result = "V"
+  }
+
+  override string toString() { result = this.(Access).toString() }
 }
 
-/** Holds if `e` is a source or a target of jump-to-definition. */
-predicate interestingElement(Element e) {
-  exists(definitionOf(e, _))
-  or
-  e = definitionOf(_, _)
-}
+/** A type mention. */
+private class TypeMentionUse extends Use, TypeMention {
+  TypeMentionUse() {
+    // In type mentions such as `T[]`, `T?`, `T*`, and `(S, T)`, we only want
+    // uses for the nested type mentions
+    forall(TypeMention child, Type t |
+      child.getParent() = this and
+      t = this.getType()
+    |
+      not t instanceof ArrayType and
+      not t instanceof NullableType and
+      not t instanceof PointerType and
+      not t instanceof TupleType
+    )
+  }
 
-/**
- * Holds if `f`, `line`, `column` indicate the start character
- * of `cc`.
- */
-private predicate constructorCallStartLoc(ConstructorCall cc, File f, int line, int column) {
-  exists(Location l |
-    l = cc.getLocation() and
-    l.getFile() = f and
-    l.getStartLine() = line and
-    l.getStartColumn() = column
-  )
-}
+  override predicate hasLocationInfo(
+    string filepath, int startline, int startcolumn, int endline, int endcolumn
+  ) {
+    Use.super.hasLocationInfo(filepath, startline, startcolumn, endline, _) and
+    endcolumn =
+      startcolumn +
+          this.getType().(ConstructedType).getUnboundGeneric().getNameWithoutBrackets().length() - 1
+    or
+    Use.super.hasLocationInfo(filepath, startline, startcolumn, endline, _) and
+    endcolumn =
+      startcolumn + this.getType().(UnboundGenericType).getNameWithoutBrackets().length() - 1
+    or
+    not this.getType() instanceof ConstructedType and
+    not this.getType() instanceof UnboundGenericType and
+    Use.super.hasLocationInfo(filepath, startline, startcolumn, endline, endcolumn)
+  }
 
-/**
- * Holds if `f`, `line`, `column` indicate the start character
- * of `tm`, which mentions `t`. Type mentions for instantiations
- * are filtered out.
- */
-private predicate typeMentionStartLoc(TypeMention tm, Type t, File f, int line, int column) {
-  exists(Location l |
-    l = tm.getLocation() and
-    l.getFile() = f and
-    l.getStartLine() = line and
-    l.getStartColumn() = column
-  ) and
-  t = tm.getMentionedType() and
-  not t instanceof ClassTemplateInstantiation
-}
+  override Type getDefinition() { result = this.getType().getUnboundDeclaration() }
 
-/**
- * Holds if `cc` and `tm` begin at the same character.
- */
-cached
-private predicate constructorCallTypeMention(ConstructorCall cc, TypeMention tm) {
-  exists(File f, int line, int column |
-    constructorCallStartLoc(cc, f, line, column) and
-    typeMentionStartLoc(tm, _, f, line, column)
-  )
+  override string getUseType() {
+    if this.getTarget() instanceof ObjectCreation
+    then result = "M" // constructor call
+    else result = "T"
+  }
+
+  override string toString() { result = TypeMention.super.toString() }
 }
 
 /**
  * Gets an element, of kind `kind`, that element `e` uses, if any.
- * Attention: This predicate yields multiple definitions for a single location.
- *
- * The `kind` is a string representing what kind of use it is:
- *  - `"M"` for function and method calls
- *  - `"T"` for uses of types
- *  - `"V"` for variable accesses
- *  - `"X"` for macro accesses
- *  - `"I"` for import / include directives
  */
 cached
-Top definitionOf(Top e, string kind) {
-  (
-    // call -> function called
-    kind = "M" and
-    result = e.(Call).getTarget() and
-    not e.(Expr).isCompilerGenerated() and
-    not e instanceof ConstructorCall // handled elsewhere
-    or
-    // access -> function, variable or enum constant accessed
-    kind = "V" and
-    result = e.(Access).getTarget() and
-    not e.(Expr).isCompilerGenerated()
-    or
-    // macro access -> macro accessed
-    kind = "X" and
-    result = e.(MacroAccess).getMacro()
-    or
-    // type mention -> type
-    kind = "T" and
-    e.(TypeMention).getMentionedType() = result and
-    not constructorCallTypeMention(_, e) and // handled elsewhere
-    // Multiple type mentions can be generated when a typedef is used, and
-    // in such cases we want to exclude all but the originating typedef.
-    not exists(Type secondary |
-      exists(TypeMention tm, File f, int startline, int startcol |
-        typeMentionStartLoc(e, result, f, startline, startcol) and
-        typeMentionStartLoc(tm, secondary, f, startline, startcol) and
-        (
-          result = secondary.(TypedefType).getBaseType() or
-          result = secondary.(TypedefType).getBaseType().(SpecifiedType).getBaseType()
-        )
-      )
-    )
-    or
-    // constructor call -> function called
-    //  - but only if there is a corresponding type mention, since
-    //    we don't want links for implicit conversions.
-    //  - using the location of the type mention, since it's
-    //    tighter that the location of the function call.
-    kind = "M" and
-    exists(ConstructorCall cc |
-      constructorCallTypeMention(cc, e) and
-      result = cc.getTarget()
-    )
-    or
-    // include -> included file
-    kind = "I" and
-    result = e.(Include).getIncludedFile() and
-    // exclude `#include` directives containing macros
-    not exists(MacroInvocation mi, Location l1, Location l2 |
-      l1 = e.(Include).getLocation() and
-      l2 = mi.getLocation() and
-      l1.getContainer() = l2.getContainer() and
-      l1.getStartLine() = l2.getStartLine()
-      // (an #include directive must be always on it's own line)
-    )
-  ) and
-  (
-    // exclude things inside macro invocations, as they will overlap
-    // with the macro invocation.
-    not e.(Element).isInMacroExpansion() and
-    // exclude nested macro invocations, as they will overlap with
-    // the top macro invocation.
-    not exists(e.(MacroAccess).getParentInvocation())
-  ) and
-  // Some entities have many locations. This can arise for an external
-  // function that is frequently declared but not defined, or perhaps
-  // for a struct type that is declared in many places. Rather than
-  // letting the result set explode, we just exclude results that are
-  // "too ambiguous" -- we could also arbitrarily pick one location
-  // later on.
+Declaration definitionOf(Use use, string kind) {
+  result = use.getDefinition() and
+  result.fromSource() and
+  kind = use.getUseType() and
+  // Some entities have many locations. This can arise for files that
+  // are duplicated multiple times in the database at different
+  // locations. Rather than letting the result set explode, we just
+  // exclude results that are "too ambiguous" -- we could also arbitrarily
+  // pick one location later on.
   strictcount(result.getLocation()) < 10
 }

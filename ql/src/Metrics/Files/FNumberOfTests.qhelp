@@ -4,13 +4,16 @@
 <qhelp>
 <overview>
 <p>
-  This metric measures the number of tests in this file.
+  This metric measures the number of tests below this location in the tree.
+  At a file level, this would just be the number of test methods in the file.
 </p>
 
 <p>
-  Tests are recognised if they are implemented with one of the major
-  unit testing frameworks. Currently the Boost and CppUnit frameworks
-  are recognised.
+  A method is considered to be a "test method" if one of the major
+  unit testing frameworks would invoke it as part of a test
+  cycle. Recognized frameworks include NUnit, Microsoft Visual Studio
+  Unit Testing Framework, and xUnit.net. For example, methods marked with
+  the NUnit <code>Test</code> attribute are counted as test methods.
 </p>
 
 <p>
@@ -40,15 +43,18 @@
   code deserve improvements in this area.
 </p>
 </recommendation>
-
 <references>
+
+
 <li>
-  Boost: official website at
-  <a href="http://www.boost.org/">http://www.boost.org/</a>.
+  NUnit: official website at <a href="http://www.nunit.org/">http://www.nunit.org/</a>.
 </li>
 <li>
-  CppUnit: official website at
-  <a href="https://freedesktop.org/wiki/Software/cppunit/">https://freedesktop.org/wiki/Software/cppunit/</a>.
+  Microsoft Visual Studio Unit Testing Framework: documentation at <a href="https://msdn.microsoft.com/en-us/library/microsoft.visualstudio.testtools.unittesting.aspx">MSDN</a>.
 </li>
+<li>
+  xUnit.net: official website at <a href="https://xunit.net/">https://xunit.net/</a>.
+</li>
+
 </references>
 </qhelp>

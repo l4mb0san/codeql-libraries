@@ -1,17 +1,21 @@
 /**
  * @name Percentage of comments
- * @description The percentage of lines that contain comments.
+ * @description The percentage of lines in the code base that contain comments.
  * @kind treemap
- * @id cpp/comment-ratio-per-file
  * @treemap.warnOn lowValues
  * @metricType file
  * @metricAggregate avg max
  * @tags maintainability
  *       documentation
+ * @id cs/comment-ratio-per-file
  */
 
-import cpp
+import csharp
 
-from File f, int comments, int total
-where f.fromSource() and numlines(unresolveElement(f), total, _, comments) and total > 0
-select f, 100.0 * (comments.(float) / total.(float)) as ratio order by ratio desc
+from SourceFile f, int total, float ratio
+where
+  total = f.getNumberOfLinesOfCode() + f.getNumberOfLinesOfComments() and
+  if total = 0
+  then ratio = 0.0
+  else ratio = 100.0 * f.getNumberOfLinesOfComments().(float) / total.(float)
+select f, ratio order by ratio desc

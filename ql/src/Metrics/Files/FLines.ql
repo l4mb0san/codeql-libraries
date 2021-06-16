@@ -2,15 +2,13 @@
  * @name Number of lines
  * @description The number of lines in each file.
  * @kind treemap
- * @id cpp/lines-per-file
  * @treemap.warnOn highValues
  * @metricType file
  * @metricAggregate avg sum max
- * @tags maintainability
+ * @id cs/lines-per-file
  */
 
-import cpp
+import csharp
 
-from File f
-where f.fromSource()
-select f, f.getMetrics().getNumberOfLines() as n order by n desc
+from SourceFile f
+select f, f.getNumberOfLines() as n order by n desc

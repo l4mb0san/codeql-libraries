@@ -1,16 +1,14 @@
 /**
- * @id cpp/examples/constructor-call
+ * @id cs/examples/constructor-call
  * @name Call to constructor
- * @description Finds places where we call `new MyClass(...)`
+ * @description Finds places where we call 'new System.Exception(...)'.
  * @tags call
  *       constructor
  *       new
  */
 
-import cpp
+import csharp
 
-from NewExpr new, Constructor c
-where
-  c = new.getInitializer().(ConstructorCall).getTarget() and
-  c.getName() = "MyClass"
+from ObjectCreation new
+where new.getObjectType().hasQualifiedName("System.Exception")
 select new

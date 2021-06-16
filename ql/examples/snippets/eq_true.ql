@@ -1,18 +1,14 @@
 /**
- * @id cpp/examples/eq-true
- * @name Equality test on boolean
- * @description Finds tests like `==true`, `!=true`
- * @tags equal
- *       comparison
+ * @id cs/examples/eq-true
+ * @name Equality test on Boolean
+ * @description Finds tests like 'x==true', 'x==false', 'x!=true', '!=false'.
+ * @tags equals
  *       test
  *       boolean
  */
 
-import cpp
+import csharp
 
-from EqualityOperation eq, Expr trueExpr
-where
-  trueExpr = eq.getAnOperand() and
-  trueExpr.getType() instanceof BoolType and
-  trueExpr.getValue().toInt() = 1
+from EqualityOperation eq
+where eq.getAnOperand() instanceof BoolLiteral
 select eq

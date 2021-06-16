@@ -1,15 +1,13 @@
 /**
- * @id cpp/examples/throw-exception
- * @name Throw exception of type
- * @description Finds places where we throw `parse_error` or one of its sub-types
- * @tags base
- *       class
- *       throw
+ * @id cs/examples/throw-exception
+ * @name Throw exception of given type
+ * @description Finds places where we throw 'System.IO.IOException' or one of its subtypes.
+ * @tags throw
  *       exception
  */
 
-import cpp
+import csharp
 
-from ThrowExpr throw
-where throw.getType().(Class).getABaseClass*().getName() = "parse_error"
+from ThrowStmt throw
+where throw.getThrownExceptionType().getBaseClass*().hasQualifiedName("System.IO.IOException")
 select throw

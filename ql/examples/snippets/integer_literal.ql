@@ -1,15 +1,13 @@
 /**
- * @id cpp/examples/integer-literal
+ * @id cs/examples/integer-literal
  * @name Integer literal
- * @description Finds places where we use the integer literal `2`
+ * @description Finds places where we use the integer literal '0'.
  * @tags integer
  *       literal
  */
 
-import cpp
+import csharp
 
-from Literal literal
-where
-  literal.getType() instanceof IntType and
-  literal.getValue().toInt() = 2
+from IntegerLiteral literal
+where literal.getValue().toInt() = 0
 select literal

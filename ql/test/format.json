@@ -1,11 +1,6 @@
 [
   {
-    "pattern": [
-      "**/*.c",
-      "**/*.cpp",
-      "**/*.h",
-      "**/*.hpp"
-    ],
+    "pattern": "**/*.cs",
     "allowMixedTabsAndSpaces": true
   }
 ]

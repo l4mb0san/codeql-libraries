@@ -1,5 +1,5 @@
-name: codeql-cpp-tests
+name: codeql-csharp-tests
 version: 0.0.0
-libraryPathDependencies: codeql-cpp
-extractor: cpp
+libraryPathDependencies: codeql-csharp
+extractor: csharp
 tests: .

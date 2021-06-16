@@ -1,19 +1,16 @@
 /**
  * @name Lines of code in files
+ * @description Files with a large number of lines might be difficult to understand and increase the chance of merge conflicts.
  * @kind treemap
- * @description Measures the number of lines in a file that contain
- *              code (rather than lines that only contain comments
- *              or are blank)
  * @treemap.warnOn highValues
  * @metricType file
  * @metricAggregate avg sum max
- * @id cpp/lines-of-code-in-files
+ * @id cs/lines-of-code-in-files
  * @tags maintainability
  *       complexity
  */
 
-import cpp
+import csharp
 
 from File f
-where f.fromSource()
-select f, f.getMetrics().getNumberOfLinesOfCode() as n order by n desc
+select f, f.getNumberOfLinesOfCode() as n order by n desc

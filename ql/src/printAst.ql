@@ -2,13 +2,13 @@
  * @name Print AST
  * @description Outputs a representation of a file's Abstract Syntax Tree. This
  *              query is used by the VS Code extension.
- * @id cpp/print-ast
+ * @id csharp/print-ast
  * @kind graph
  * @tags ide-contextual-queries/print-ast
  */
 
-import cpp
-import semmle.code.cpp.PrintAST
+import csharp
+import semmle.code.csharp.PrintAst
 import definitions
 
 /**
@@ -16,12 +16,13 @@ import definitions
  */
 external string selectedSourceFile();
 
-class Cfg extends PrintASTConfiguration {
+class PrintAstConfigurationOverride extends PrintAstConfiguration {
   /**
-   * Holds if the AST for `func` should be printed.
-   * Print All functions from the selected file.
+   * Holds if the location matches the selected file in the VS Code extension and
+   * the element is `fromSource`.
    */
-  override predicate shouldPrintFunction(Function func) {
-    func.getFile() = getFileBySourceArchiveName(selectedSourceFile())
+  override predicate shouldPrint(Element e, Location l) {
+    super.shouldPrint(e, l) and
+    l.getFile() = getFileBySourceArchiveName(selectedSourceFile())
   }
 }

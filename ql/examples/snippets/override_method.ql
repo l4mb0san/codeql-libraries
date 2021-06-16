@@ -1,18 +1,16 @@
 /**
- * @id cpp/examples/override-method
+ * @id cs/examples/override-method
  * @name Override of method
- * @description Finds methods that override `std::exception::what()`
- * @tags function
- *       method
+ * @description Finds methods that directly override 'Object.ToString'.
+ * @tags method
  *       override
  */
 
-import cpp
+import csharp
 
-from MemberFunction override, MemberFunction base
+from Method override, Method base
 where
-  base.getName() = "what" and
-  base.getDeclaringType().getName() = "exception" and
-  base.getDeclaringType().getNamespace().getName() = "std" and
-  override.overrides+(base)
+  base.hasName("ToString") and
+  base.getDeclaringType().hasQualifiedName("System.Object") and
+  base.getAnOverrider() = override
 select override

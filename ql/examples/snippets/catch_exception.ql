@@ -1,15 +1,14 @@
 /**
- * @id cpp/examples/catch-exception
+ * @id cs/examples/catch-exception
  * @name Catch exception
- * @description Finds places where we catch exceptions of type `parse_error`
+ * @description Finds places where we catch exceptions of type 'System.IO.IOException'.
  * @tags catch
  *       try
  *       exception
  */
 
-import cpp
+import csharp
 
-from CatchBlock catch
-// `stripType` converts `const parse_error &` to `parse_error`.
-where catch.getParameter().getType().stripType().hasName("parse_error")
+from CatchClause catch
+where catch.getCaughtExceptionType().hasQualifiedName("System.IO.IOException")
 select catch

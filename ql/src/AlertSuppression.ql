@@ -2,34 +2,21 @@
  * @name Alert suppression
  * @description Generates information about alert suppressions.
  * @kind alert-suppression
- * @id cpp/alert-suppression
+ * @id cs/alert-suppression
  */
 
-import cpp
+import csharp
 
 /**
  * An alert suppression comment.
  */
-class SuppressionComment extends Comment {
+class SuppressionComment extends CommentLine {
   string annotation;
-  string text;
 
   SuppressionComment() {
-    (
-      this instanceof CppStyleComment and
-      // strip the beginning slashes
-      text = getContents().suffix(2)
-      or
-      this instanceof CStyleComment and
-      // strip both the beginning /* and the end */ the comment
-      exists(string text0 |
-        text0 = getContents().suffix(2) and
-        text = text0.prefix(text0.length() - 2)
-      ) and
-      // The /* */ comment must be a single-line comment
-      not text.matches("%\n%")
-    ) and
-    (
+    // Must be either `// ...` or `/* ... */` on a single line.
+    this.getRawText().regexpMatch("//.*|/\\*.*\\*/") and
+    exists(string text | text = this.getText() |
       // match `lgtm[...]` anywhere in the comment
       annotation = text.regexpFind("(?i)\\blgtm\\s*\\[[^\\]]*\\]", _, _)
       or
@@ -37,9 +24,6 @@ class SuppressionComment extends Comment {
       annotation = text.regexpFind("(?i)(?<=^|;)\\s*lgtm(?!\\B|\\s*\\[)", _, _).trim()
     )
   }
-
-  /** Gets the text in this comment, excluding the leading //. */
-  string getText() { result = text }
 
   /** Gets the suppression annotation in this comment. */
   string getAnnotation() { result = annotation }
@@ -54,14 +38,17 @@ class SuppressionComment extends Comment {
   }
 
   /** Gets the scope of this suppression. */
-  SuppressionScope getScope() { result = this }
+  SuppressionScope getScope() { this = result.getSuppressionComment() }
 }
 
 /**
  * The scope of an alert suppression comment.
  */
-class SuppressionScope extends ElementBase {
+class SuppressionScope extends @commentline {
   SuppressionScope() { this instanceof SuppressionComment }
+
+  /** Gets a suppression comment with this scope. */
+  SuppressionComment getSuppressionComment() { result = this }
 
   /**
    * Holds if this element is at the specified location.
@@ -75,6 +62,9 @@ class SuppressionScope extends ElementBase {
   ) {
     this.(SuppressionComment).covers(filepath, startline, startcolumn, endline, endcolumn)
   }
+
+  /** Gets a textual representation of this element. */
+  string toString() { result = "suppression range" }
 }
 
 from SuppressionComment c
