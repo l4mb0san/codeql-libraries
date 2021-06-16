@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns:qlpath xmlns:ns="https://semmle.com/schemas/qlpath">
-    <librarypath/>
-    <dbscheme>/go-queries/go.dbscheme</dbscheme>
-</ns:qlpath>
+<ns2:qlpath xmlns:ns2="https://semmle.com/schemas/qlpath">
+    <librarypath>
+        <path>/semmlecode-cpp-queries</path>
+    </librarypath>
+    <dbscheme>/semmlecode-cpp-queries/semmlecode.cpp.dbscheme</dbscheme>
+    <defaultImports>
+        <defaultImport>cpp</defaultImport>
+    </defaultImports>
+</ns2:qlpath>

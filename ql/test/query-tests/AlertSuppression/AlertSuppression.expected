@@ -1,61 +1,58 @@
-| AlertSuppressionExample.go:11:42:11:74 | comment |  lgtm[go/hardcoded-credentials] | lgtm[go/hardcoded-credentials] | AlertSuppressionExample.go:11:1:11:74 | suppression range |
-| tst.go:7:8:7:14 | comment |  lgtm | lgtm | tst.go:7:1:7:14 | suppression range |
-| tst.go:8:8:8:39 | comment |  lgtm[go/redundant-assignment] | lgtm[go/redundant-assignment] | tst.go:8:1:8:39 | suppression range |
-| tst.go:9:8:9:39 | comment |  lgtm[go/redundant-assignment] | lgtm[go/redundant-assignment] | tst.go:9:1:9:39 | suppression range |
-| tst.go:10:8:10:63 | comment |  lgtm[go/redundant-assignment, go/redundant-operation] | lgtm[go/redundant-assignment, go/redundant-operation] | tst.go:10:1:10:63 | suppression range |
-| tst.go:11:8:11:29 | comment |  lgtm[@tag:nullness] | lgtm[@tag:nullness] | tst.go:11:1:11:29 | suppression range |
-| tst.go:12:8:12:53 | comment |  lgtm[@tag:nullness,go/redundant-assignment] | lgtm[@tag:nullness,go/redundant-assignment] | tst.go:12:1:12:53 | suppression range |
-| tst.go:13:8:13:35 | comment |  lgtm[@expires:2017-06-11] | lgtm[@expires:2017-06-11] | tst.go:13:1:13:35 | suppression range |
-| tst.go:14:8:14:70 | comment |  lgtm[go/redundant-operation] because I know better than lgtm | lgtm[go/redundant-operation] | tst.go:14:1:14:70 | suppression range |
-| tst.go:15:8:15:25 | comment |  lgtm: blah blah | lgtm | tst.go:15:1:15:25 | suppression range |
-| tst.go:16:8:16:39 | comment |  lgtm blah blah #falsepositive | lgtm | tst.go:16:1:16:39 | suppression range |
-| tst.go:17:8:17:39 | comment | lgtm  [go/redundant-operation] | lgtm  [go/redundant-operation] | tst.go:17:1:17:39 | suppression range |
-| tst.go:18:8:18:17 | comment |  lgtm  | lgtm | tst.go:18:1:18:17 | suppression range |
-| tst.go:19:8:19:16 | comment |  lgtm[] | lgtm[] | tst.go:19:1:19:16 | suppression range |
-| tst.go:21:8:21:13 | comment | lgtm | lgtm | tst.go:21:1:21:13 | suppression range |
-| tst.go:22:8:22:14 | comment | \tlgtm | lgtm | tst.go:22:1:22:14 | suppression range |
-| tst.go:23:8:23:40 | comment |  lgtm\t[go/redundant-assignment] | lgtm\t[go/redundant-assignment] | tst.go:23:1:23:40 | suppression range |
-| tst.go:26:8:26:19 | comment |  foo; lgtm | lgtm | tst.go:26:1:26:19 | suppression range |
-| tst.go:27:8:27:44 | comment |  foo; lgtm[go/redundant-assignment] | lgtm[go/redundant-assignment] | tst.go:27:1:27:44 | suppression range |
-| tst.go:29:8:29:43 | comment |  foo lgtm[go/redundant-assignment] | lgtm[go/redundant-assignment] | tst.go:29:1:29:43 | suppression range |
-| tst.go:31:8:31:47 | comment |  foo lgtm[go/redundant-assignment] bar | lgtm[go/redundant-assignment] | tst.go:31:1:31:47 | suppression range |
-| tst.go:32:8:32:15 | comment |  LGTM! | LGTM | tst.go:32:1:32:15 | suppression range |
-| tst.go:33:8:33:39 | comment |  LGTM[go/redundant-assignment] | LGTM[go/redundant-assignment] | tst.go:33:1:33:39 | suppression range |
-| tst.go:34:8:34:72 | comment |  lgtm[go/redundant-assignment] and lgtm[go/redundant-operation] | lgtm[go/redundant-assignment] | tst.go:34:1:34:72 | suppression range |
-| tst.go:34:8:34:72 | comment |  lgtm[go/redundant-assignment] and lgtm[go/redundant-operation] | lgtm[go/redundant-operation] | tst.go:34:1:34:72 | suppression range |
-| tst.go:35:8:35:45 | comment |  lgtm[go/redundant-assignment]; lgtm | lgtm | tst.go:35:1:35:45 | suppression range |
-| tst.go:35:8:35:45 | comment |  lgtm[go/redundant-assignment]; lgtm | lgtm[go/redundant-assignment] | tst.go:35:1:35:45 | suppression range |
-| tst.go:36:8:36:19 | comment |  lgtm[]  | lgtm[] | tst.go:36:1:36:19 | suppression range |
-| tst.go:37:8:37:42 | comment |  lgtm[go/redundant-assignment]  | lgtm[go/redundant-assignment] | tst.go:37:1:37:42 | suppression range |
-| tst.go:43:8:43:56 | comment |  lgtm[@tag:nullness,go/redundant-assignment]  | lgtm[@tag:nullness,go/redundant-assignment] | tst.go:43:1:43:56 | suppression range |
-| tst.go:44:8:44:32 | comment |  lgtm[@tag:nullness]  | lgtm[@tag:nullness] | tst.go:44:1:44:32 | suppression range |
-| tstWindows.go:7:8:7:14 | comment |  lgtm | lgtm | tstWindows.go:7:1:7:14 | suppression range |
-| tstWindows.go:8:8:8:39 | comment |  lgtm[go/redundant-assignment] | lgtm[go/redundant-assignment] | tstWindows.go:8:1:8:39 | suppression range |
-| tstWindows.go:9:8:9:39 | comment |  lgtm[go/redundant-assignment] | lgtm[go/redundant-assignment] | tstWindows.go:9:1:9:39 | suppression range |
-| tstWindows.go:10:8:10:63 | comment |  lgtm[go/redundant-assignment, go/redundant-operation] | lgtm[go/redundant-assignment, go/redundant-operation] | tstWindows.go:10:1:10:63 | suppression range |
-| tstWindows.go:11:8:11:29 | comment |  lgtm[@tag:nullness] | lgtm[@tag:nullness] | tstWindows.go:11:1:11:29 | suppression range |
-| tstWindows.go:12:8:12:53 | comment |  lgtm[@tag:nullness,go/redundant-assignment] | lgtm[@tag:nullness,go/redundant-assignment] | tstWindows.go:12:1:12:53 | suppression range |
-| tstWindows.go:13:8:13:35 | comment |  lgtm[@expires:2017-06-11] | lgtm[@expires:2017-06-11] | tstWindows.go:13:1:13:35 | suppression range |
-| tstWindows.go:14:8:14:70 | comment |  lgtm[go/redundant-operation] because I know better than lgtm | lgtm[go/redundant-operation] | tstWindows.go:14:1:14:70 | suppression range |
-| tstWindows.go:15:8:15:25 | comment |  lgtm: blah blah | lgtm | tstWindows.go:15:1:15:25 | suppression range |
-| tstWindows.go:16:8:16:39 | comment |  lgtm blah blah #falsepositive | lgtm | tstWindows.go:16:1:16:39 | suppression range |
-| tstWindows.go:17:8:17:39 | comment | lgtm  [go/redundant-operation] | lgtm  [go/redundant-operation] | tstWindows.go:17:1:17:39 | suppression range |
-| tstWindows.go:18:8:18:17 | comment |  lgtm  | lgtm | tstWindows.go:18:1:18:17 | suppression range |
-| tstWindows.go:19:8:19:16 | comment |  lgtm[] | lgtm[] | tstWindows.go:19:1:19:16 | suppression range |
-| tstWindows.go:21:8:21:13 | comment | lgtm | lgtm | tstWindows.go:21:1:21:13 | suppression range |
-| tstWindows.go:22:8:22:14 | comment | \tlgtm | lgtm | tstWindows.go:22:1:22:14 | suppression range |
-| tstWindows.go:23:8:23:40 | comment |  lgtm\t[go/redundant-assignment] | lgtm\t[go/redundant-assignment] | tstWindows.go:23:1:23:40 | suppression range |
-| tstWindows.go:26:8:26:19 | comment |  foo; lgtm | lgtm | tstWindows.go:26:1:26:19 | suppression range |
-| tstWindows.go:27:8:27:44 | comment |  foo; lgtm[go/redundant-assignment] | lgtm[go/redundant-assignment] | tstWindows.go:27:1:27:44 | suppression range |
-| tstWindows.go:29:8:29:43 | comment |  foo lgtm[go/redundant-assignment] | lgtm[go/redundant-assignment] | tstWindows.go:29:1:29:43 | suppression range |
-| tstWindows.go:31:8:31:47 | comment |  foo lgtm[go/redundant-assignment] bar | lgtm[go/redundant-assignment] | tstWindows.go:31:1:31:47 | suppression range |
-| tstWindows.go:32:8:32:15 | comment |  LGTM! | LGTM | tstWindows.go:32:1:32:15 | suppression range |
-| tstWindows.go:33:8:33:39 | comment |  LGTM[go/redundant-assignment] | LGTM[go/redundant-assignment] | tstWindows.go:33:1:33:39 | suppression range |
-| tstWindows.go:34:8:34:72 | comment |  lgtm[go/redundant-assignment] and lgtm[go/redundant-operation] | lgtm[go/redundant-assignment] | tstWindows.go:34:1:34:72 | suppression range |
-| tstWindows.go:34:8:34:72 | comment |  lgtm[go/redundant-assignment] and lgtm[go/redundant-operation] | lgtm[go/redundant-operation] | tstWindows.go:34:1:34:72 | suppression range |
-| tstWindows.go:35:8:35:45 | comment |  lgtm[go/redundant-assignment]; lgtm | lgtm | tstWindows.go:35:1:35:45 | suppression range |
-| tstWindows.go:35:8:35:45 | comment |  lgtm[go/redundant-assignment]; lgtm | lgtm[go/redundant-assignment] | tstWindows.go:35:1:35:45 | suppression range |
-| tstWindows.go:36:8:36:19 | comment |  lgtm[]  | lgtm[] | tstWindows.go:36:1:36:19 | suppression range |
-| tstWindows.go:37:8:37:42 | comment |  lgtm[go/redundant-assignment]  | lgtm[go/redundant-assignment] | tstWindows.go:37:1:37:42 | suppression range |
-| tstWindows.go:43:8:43:56 | comment |  lgtm[@tag:nullness,go/redundant-assignment]  | lgtm[@tag:nullness,go/redundant-assignment] | tstWindows.go:43:1:43:56 | suppression range |
-| tstWindows.go:44:8:44:32 | comment |  lgtm[@tag:nullness]  | lgtm[@tag:nullness] | tstWindows.go:44:1:44:32 | suppression range |
+| tst.c:1:12:1:18 | // lgtm |  lgtm | lgtm | tst.c:1:1:1:18 | // lgtm |
+| tst.c:2:1:2:30 | // lgtm[js/debugger-statement] |  lgtm[js/debugger-statement] | lgtm[js/debugger-statement] | tst.c:2:1:2:30 | // lgtm[js/debugger-statement] |
+| tst.c:3:1:3:61 | // lgtm[js/debugger-statement, js/invocation-of-non-function] |  lgtm[js/debugger-statement, js/invocation-of-non-function] | lgtm[js/debugger-statement, js/invocation-of-non-function] | tst.c:3:1:3:61 | // lgtm[js/debugger-statement, js/invocation-of-non-function] |
+| tst.c:4:1:4:22 | // lgtm[@tag:nullness] |  lgtm[@tag:nullness] | lgtm[@tag:nullness] | tst.c:4:1:4:22 | // lgtm[@tag:nullness] |
+| tst.c:5:1:5:44 | // lgtm[@tag:nullness,js/debugger-statement] |  lgtm[@tag:nullness,js/debugger-statement] | lgtm[@tag:nullness,js/debugger-statement] | tst.c:5:1:5:44 | // lgtm[@tag:nullness,js/debugger-statement] |
+| tst.c:6:1:6:28 | // lgtm[@expires:2017-06-11] |  lgtm[@expires:2017-06-11] | lgtm[@expires:2017-06-11] | tst.c:6:1:6:28 | // lgtm[@expires:2017-06-11] |
+| tst.c:7:1:7:70 | // lgtm[js/invocation-of-non-function] because I know better than lgtm |  lgtm[js/invocation-of-non-function] because I know better than lgtm | lgtm[js/invocation-of-non-function] | tst.c:7:1:7:70 | // lgtm[js/invocation-of-non-function] because I know better than lgtm |
+| tst.c:8:1:8:18 | // lgtm: blah blah |  lgtm: blah blah | lgtm | tst.c:8:1:8:18 | // lgtm: blah blah |
+| tst.c:9:1:9:32 | // lgtm blah blah #falsepositive |  lgtm blah blah #falsepositive | lgtm | tst.c:9:1:9:32 | // lgtm blah blah #falsepositive |
+| tst.c:10:1:10:39 | //lgtm  [js/invocation-of-non-function] | lgtm  [js/invocation-of-non-function] | lgtm  [js/invocation-of-non-function] | tst.c:10:1:10:39 | //lgtm  [js/invocation-of-non-function] |
+| tst.c:11:1:11:10 | /* lgtm */ |  lgtm  | lgtm | tst.c:11:1:11:10 | /* lgtm */ |
+| tst.c:12:1:12:9 | // lgtm[] |  lgtm[] | lgtm[] | tst.c:12:1:12:9 | // lgtm[] |
+| tst.c:14:1:14:6 | //lgtm | lgtm | lgtm | tst.c:14:1:14:6 | //lgtm |
+| tst.c:15:1:15:7 | //\tlgtm | \tlgtm | lgtm | tst.c:15:1:15:7 | //\tlgtm |
+| tst.c:16:1:16:31 | // lgtm\t[js/debugger-statement] |  lgtm\t[js/debugger-statement] | lgtm\t[js/debugger-statement] | tst.c:16:1:16:31 | // lgtm\t[js/debugger-statement] |
+| tst.c:19:1:19:12 | // foo; lgtm |  foo; lgtm | lgtm | tst.c:19:1:19:12 | // foo; lgtm |
+| tst.c:20:1:20:35 | // foo; lgtm[js/debugger-statement] |  foo; lgtm[js/debugger-statement] | lgtm[js/debugger-statement] | tst.c:20:1:20:35 | // foo; lgtm[js/debugger-statement] |
+| tst.c:22:1:22:34 | // foo lgtm[js/debugger-statement] |  foo lgtm[js/debugger-statement] | lgtm[js/debugger-statement] | tst.c:22:1:22:34 | // foo lgtm[js/debugger-statement] |
+| tst.c:24:1:24:38 | // foo lgtm[js/debugger-statement] bar |  foo lgtm[js/debugger-statement] bar | lgtm[js/debugger-statement] | tst.c:24:1:24:38 | // foo lgtm[js/debugger-statement] bar |
+| tst.c:25:1:25:8 | // LGTM! |  LGTM! | LGTM | tst.c:25:1:25:8 | // LGTM! |
+| tst.c:26:1:26:30 | // LGTM[js/debugger-statement] |  LGTM[js/debugger-statement] | LGTM[js/debugger-statement] | tst.c:26:1:26:30 | // LGTM[js/debugger-statement] |
+| tst.c:27:1:27:70 | // lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] |  lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] | lgtm[js/debugger-statement] | tst.c:27:1:27:70 | // lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] |
+| tst.c:27:1:27:70 | // lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] |  lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] | lgtm[js/invocation-of-non-function] | tst.c:27:1:27:70 | // lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] |
+| tst.c:28:1:28:36 | // lgtm[js/debugger-statement]; lgtm |  lgtm[js/debugger-statement]; lgtm | lgtm | tst.c:28:1:28:36 | // lgtm[js/debugger-statement]; lgtm |
+| tst.c:28:1:28:36 | // lgtm[js/debugger-statement]; lgtm |  lgtm[js/debugger-statement]; lgtm | lgtm[js/debugger-statement] | tst.c:28:1:28:36 | // lgtm[js/debugger-statement]; lgtm |
+| tst.c:29:1:29:12 | /* lgtm[] */ |  lgtm[]  | lgtm[] | tst.c:29:1:29:12 | /* lgtm[] */ |
+| tst.c:30:1:30:41 | /* lgtm[js/invocation-of-non-function] */ |  lgtm[js/invocation-of-non-function]  | lgtm[js/invocation-of-non-function] | tst.c:30:1:30:41 | /* lgtm[js/invocation-of-non-function] */ |
+| tst.c:36:1:36:55 | /* lgtm[@tag:nullness,js/invocation-of-non-function] */ |  lgtm[@tag:nullness,js/invocation-of-non-function]  | lgtm[@tag:nullness,js/invocation-of-non-function] | tst.c:36:1:36:55 | /* lgtm[@tag:nullness,js/invocation-of-non-function] */ |
+| tst.c:37:1:37:25 | /* lgtm[@tag:nullness] */ |  lgtm[@tag:nullness]  | lgtm[@tag:nullness] | tst.c:37:1:37:25 | /* lgtm[@tag:nullness] */ |
+| tstWindows.c:1:12:1:18 | // lgtm |  lgtm | lgtm | tstWindows.c:1:1:1:18 | // lgtm |
+| tstWindows.c:2:1:2:30 | // lgtm[js/debugger-statement] |  lgtm[js/debugger-statement] | lgtm[js/debugger-statement] | tstWindows.c:2:1:2:30 | // lgtm[js/debugger-statement] |
+| tstWindows.c:3:1:3:61 | // lgtm[js/debugger-statement, js/invocation-of-non-function] |  lgtm[js/debugger-statement, js/invocation-of-non-function] | lgtm[js/debugger-statement, js/invocation-of-non-function] | tstWindows.c:3:1:3:61 | // lgtm[js/debugger-statement, js/invocation-of-non-function] |
+| tstWindows.c:4:1:4:22 | // lgtm[@tag:nullness] |  lgtm[@tag:nullness] | lgtm[@tag:nullness] | tstWindows.c:4:1:4:22 | // lgtm[@tag:nullness] |
+| tstWindows.c:5:1:5:44 | // lgtm[@tag:nullness,js/debugger-statement] |  lgtm[@tag:nullness,js/debugger-statement] | lgtm[@tag:nullness,js/debugger-statement] | tstWindows.c:5:1:5:44 | // lgtm[@tag:nullness,js/debugger-statement] |
+| tstWindows.c:6:1:6:28 | // lgtm[@expires:2017-06-11] |  lgtm[@expires:2017-06-11] | lgtm[@expires:2017-06-11] | tstWindows.c:6:1:6:28 | // lgtm[@expires:2017-06-11] |
+| tstWindows.c:7:1:7:70 | // lgtm[js/invocation-of-non-function] because I know better than lgtm |  lgtm[js/invocation-of-non-function] because I know better than lgtm | lgtm[js/invocation-of-non-function] | tstWindows.c:7:1:7:70 | // lgtm[js/invocation-of-non-function] because I know better than lgtm |
+| tstWindows.c:8:1:8:18 | // lgtm: blah blah |  lgtm: blah blah | lgtm | tstWindows.c:8:1:8:18 | // lgtm: blah blah |
+| tstWindows.c:9:1:9:32 | // lgtm blah blah #falsepositive |  lgtm blah blah #falsepositive | lgtm | tstWindows.c:9:1:9:32 | // lgtm blah blah #falsepositive |
+| tstWindows.c:10:1:10:39 | //lgtm  [js/invocation-of-non-function] | lgtm  [js/invocation-of-non-function] | lgtm  [js/invocation-of-non-function] | tstWindows.c:10:1:10:39 | //lgtm  [js/invocation-of-non-function] |
+| tstWindows.c:11:1:11:10 | /* lgtm */ |  lgtm  | lgtm | tstWindows.c:11:1:11:10 | /* lgtm */ |
+| tstWindows.c:12:1:12:9 | // lgtm[] |  lgtm[] | lgtm[] | tstWindows.c:12:1:12:9 | // lgtm[] |
+| tstWindows.c:14:1:14:6 | //lgtm | lgtm | lgtm | tstWindows.c:14:1:14:6 | //lgtm |
+| tstWindows.c:15:1:15:7 | //\tlgtm | \tlgtm | lgtm | tstWindows.c:15:1:15:7 | //\tlgtm |
+| tstWindows.c:16:1:16:31 | // lgtm\t[js/debugger-statement] |  lgtm\t[js/debugger-statement] | lgtm\t[js/debugger-statement] | tstWindows.c:16:1:16:31 | // lgtm\t[js/debugger-statement] |
+| tstWindows.c:19:1:19:12 | // foo; lgtm |  foo; lgtm | lgtm | tstWindows.c:19:1:19:12 | // foo; lgtm |
+| tstWindows.c:20:1:20:35 | // foo; lgtm[js/debugger-statement] |  foo; lgtm[js/debugger-statement] | lgtm[js/debugger-statement] | tstWindows.c:20:1:20:35 | // foo; lgtm[js/debugger-statement] |
+| tstWindows.c:22:1:22:34 | // foo lgtm[js/debugger-statement] |  foo lgtm[js/debugger-statement] | lgtm[js/debugger-statement] | tstWindows.c:22:1:22:34 | // foo lgtm[js/debugger-statement] |
+| tstWindows.c:24:1:24:38 | // foo lgtm[js/debugger-statement] bar |  foo lgtm[js/debugger-statement] bar | lgtm[js/debugger-statement] | tstWindows.c:24:1:24:38 | // foo lgtm[js/debugger-statement] bar |
+| tstWindows.c:25:1:25:8 | // LGTM! |  LGTM! | LGTM | tstWindows.c:25:1:25:8 | // LGTM! |
+| tstWindows.c:26:1:26:30 | // LGTM[js/debugger-statement] |  LGTM[js/debugger-statement] | LGTM[js/debugger-statement] | tstWindows.c:26:1:26:30 | // LGTM[js/debugger-statement] |
+| tstWindows.c:27:1:27:70 | // lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] |  lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] | lgtm[js/debugger-statement] | tstWindows.c:27:1:27:70 | // lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] |
+| tstWindows.c:27:1:27:70 | // lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] |  lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] | lgtm[js/invocation-of-non-function] | tstWindows.c:27:1:27:70 | // lgtm[js/debugger-statement] and lgtm[js/invocation-of-non-function] |
+| tstWindows.c:28:1:28:36 | // lgtm[js/debugger-statement]; lgtm |  lgtm[js/debugger-statement]; lgtm | lgtm | tstWindows.c:28:1:28:36 | // lgtm[js/debugger-statement]; lgtm |
+| tstWindows.c:28:1:28:36 | // lgtm[js/debugger-statement]; lgtm |  lgtm[js/debugger-statement]; lgtm | lgtm[js/debugger-statement] | tstWindows.c:28:1:28:36 | // lgtm[js/debugger-statement]; lgtm |
+| tstWindows.c:29:1:29:12 | /* lgtm[] */ |  lgtm[]  | lgtm[] | tstWindows.c:29:1:29:12 | /* lgtm[] */ |
+| tstWindows.c:30:1:30:41 | /* lgtm[js/invocation-of-non-function] */ |  lgtm[js/invocation-of-non-function]  | lgtm[js/invocation-of-non-function] | tstWindows.c:30:1:30:41 | /* lgtm[js/invocation-of-non-function] */ |
+| tstWindows.c:36:1:36:55 | /* lgtm[@tag:nullness,js/invocation-of-non-function] */ |  lgtm[@tag:nullness,js/invocation-of-non-function]  | lgtm[@tag:nullness,js/invocation-of-non-function] | tstWindows.c:36:1:36:55 | /* lgtm[@tag:nullness,js/invocation-of-non-function] */ |
+| tstWindows.c:37:1:37:25 | /* lgtm[@tag:nullness] */ |  lgtm[@tag:nullness]  | lgtm[@tag:nullness] | tstWindows.c:37:1:37:25 | /* lgtm[@tag:nullness] */ |

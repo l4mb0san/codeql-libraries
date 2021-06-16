@@ -2,22 +2,33 @@
  * @name Alert suppression
  * @description Generates information about alert suppressions.
  * @kind alert-suppression
- * @id go/alert-suppression
+ * @id cpp/alert-suppression
  */
 
-import go
+import cpp
 
 /**
  * An alert suppression comment.
  */
-class SuppressionComment extends Locatable {
-  string text;
+class SuppressionComment extends Comment {
   string annotation;
+  string text;
 
   SuppressionComment() {
-    text = this.(Comment).getText() and
-    // suppression comments must be single-line
-    not text.matches("%\n%") and
+    (
+      this instanceof CppStyleComment and
+      // strip the beginning slashes
+      text = getContents().suffix(2)
+      or
+      this instanceof CStyleComment and
+      // strip both the beginning /* and the end */ the comment
+      exists(string text0 |
+        text0 = getContents().suffix(2) and
+        text = text0.prefix(text0.length() - 2)
+      ) and
+      // The /* */ comment must be a single-line comment
+      not text.matches("%\n%")
+    ) and
     (
       // match `lgtm[...]` anywhere in the comment
       annotation = text.regexpFind("(?i)\\blgtm\\s*\\[[^\\]]*\\]", _, _)
@@ -27,7 +38,7 @@ class SuppressionComment extends Locatable {
     )
   }
 
-  /** Gets the text of this suppression comment, not including delimiters. */
+  /** Gets the text in this comment, excluding the leading //. */
   string getText() { result = text }
 
   /** Gets the suppression annotation in this comment. */
@@ -43,17 +54,14 @@ class SuppressionComment extends Locatable {
   }
 
   /** Gets the scope of this suppression. */
-  SuppressionScope getScope() { this = result.getSuppressionComment() }
+  SuppressionScope getScope() { result = this }
 }
 
 /**
  * The scope of an alert suppression comment.
  */
-class SuppressionScope extends @locatable {
+class SuppressionScope extends ElementBase {
   SuppressionScope() { this instanceof SuppressionComment }
-
-  /** Gets a suppression comment with this scope. */
-  SuppressionComment getSuppressionComment() { result = this }
 
   /**
    * Holds if this element is at the specified location.
@@ -67,9 +75,6 @@ class SuppressionScope extends @locatable {
   ) {
     this.(SuppressionComment).covers(filepath, startline, startcolumn, endline, endcolumn)
   }
-
-  /** Gets a textual representation of this element. */
-  string toString() { result = "suppression range" }
 }
 
 from SuppressionComment c

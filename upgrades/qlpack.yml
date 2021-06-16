@@ -1,2 +1,2 @@
-name: codeql-go-upgrades
+name: codeql-cpp-upgrades
 upgrades: .

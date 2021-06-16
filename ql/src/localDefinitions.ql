@@ -1,20 +1,16 @@
 /**
  * @name Jump-to-definition links
  * @description Generates use-definition pairs that provide the data
- *              for jump-to-definition in the code viewer.
+ *              for jump-to-definition in the code viewer of VSCode.
  * @kind definitions
- * @id go/ide-jump-to-definition
+ * @id cpp/ide-jump-to-definition
  * @tags ide-contextual-queries/local-definitions
  */
 
-import go
-import ideContextual
+import definitions
 
 external string selectedSourceFile();
 
-from Ident def, Ident use, Entity e
-where
-  use.uses(e) and
-  def.declares(e) and
-  use.getFile() = getFileBySourceArchiveName(selectedSourceFile())
-select use, def, "V"
+from Top e, Top def, string kind
+where def = definitionOf(e, kind) and e.getFile() = getFileBySourceArchiveName(selectedSourceFile())
+select e, def, kind

@@ -1,5 +1,5 @@
-name: codeql-go
+name: codeql-cpp
 version: 0.0.0
-dbscheme: go.dbscheme
+dbscheme: semmlecode.cpp.dbscheme
 suites: codeql-suites
-extractor: go
+extractor: cpp

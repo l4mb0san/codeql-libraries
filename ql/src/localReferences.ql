@@ -1,20 +1,17 @@
 /**
  * @name Find-references links
  * @description Generates use-definition pairs that provide the data
- *              for find-references in the code viewer.
+ *              for find-references in the code viewer of VSCode.
  * @kind definitions
- * @id go/ide-find-references
+ * @id cpp/ide-find-references
  * @tags ide-contextual-queries/local-references
  */
 
-import go
-import ideContextual
+import definitions
 
 external string selectedSourceFile();
 
-from Ident def, Ident use, Entity e
+from Top e, Top def, string kind
 where
-  use.uses(e) and
-  def.declares(e) and
-  def.getFile() = getFileBySourceArchiveName(selectedSourceFile())
-select use, def, "V"
+  def = definitionOf(e, kind) and def.getFile() = getFileBySourceArchiveName(selectedSourceFile())
+select e, def, kind
