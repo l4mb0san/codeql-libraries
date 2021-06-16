@@ -5,20 +5,13 @@
  * @treemap.warnOn highValues
  * @metricType file
  * @metricAggregate avg sum max
- * @id cs/lines-of-commented-out-code-in-files
+ * @id java/lines-of-commented-out-code-in-files
  * @tags maintainability
  *       documentation
  */
 
-import csharp
+import Violations_of_Best_Practice.Comments.CommentedCode
 
-from SourceFile f, int n
-where
-  n =
-    count(CommentLine line |
-      exists(CommentBlock block |
-        block.getLocation().getFile() = f and
-        line = block.getAProbableCodeLine()
-      )
-    )
+from File f, int n
+where n = sum(CommentedOutCode comment | comment.getFile() = f | comment.getCodeLines())
 select f, n order by n desc

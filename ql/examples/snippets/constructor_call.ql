@@ -1,14 +1,14 @@
 /**
- * @id cs/examples/constructor-call
+ * @id java/examples/constructor-call
  * @name Call to constructor
- * @description Finds places where we call 'new System.Exception(...)'.
+ * @description Finds places where we call `new com.example.Class(...)`
  * @tags call
  *       constructor
  *       new
  */
 
-import csharp
+import java
 
-from ObjectCreation new
-where new.getObjectType().hasQualifiedName("System.Exception")
+from ClassInstanceExpr new
+where new.getConstructedType().hasQualifiedName("com.example", "Class")
 select new

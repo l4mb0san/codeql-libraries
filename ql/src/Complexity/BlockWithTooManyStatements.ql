@@ -1,24 +1,21 @@
 /**
  * @name Block with too many statements
- * @description Blocks with too many consecutive statements are candidates for refactoring. Only complex statements are counted here
- *              (eg. 'for', 'while', 'switch' ...). The top-level logic will be clearer if each complex statement is extracted
- *              to a function.
+ * @description A block that contains too many complex statements becomes unreadable and
+ *              unmaintainable.
  * @kind problem
  * @problem.severity recommendation
- * @precision high
- * @id cs/complex-block
+ * @precision low
+ * @id java/complex-block
  * @tags maintainability
  *       testability
  *       complexity
  */
 
-import csharp
+import java
 
 class ComplexStmt extends Stmt {
   ComplexStmt() {
-    this instanceof ForStmt or
-    this instanceof WhileStmt or
-    this instanceof DoStmt or
+    this instanceof LoopStmt or
     this instanceof SwitchStmt
   }
 }

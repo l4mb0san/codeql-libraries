@@ -40,17 +40,21 @@ the goal is to separate data from behavior.
 
 </p></recommendation>
 <example>
-<p>In the following example, the method <code>GetTotalPrice</code> is in the
+<p>In the following example, initially the method <code>getTotalPrice</code> is in the
 <code>Basket</code> class, but it only uses data belonging to the <code>Item</code> class.
-Therefore, it represents an instance of feature envy.
-</p>
+Therefore, it represents an instance of feature envy. To refactor
+it, <code>getTotalPrice</code> can be moved to <code>Item</code> and its
+parameter can be removed. The resulting
+code is easier to understand and keep consistent.</p>
 
-<sample src="FeatureEnvyBad.cs" />
+<sample src="FeatureEnvy.java" />
 
-<p>In the revised example, <code>GetTotalPrice</code> is moved to the <code>Item</code> class and its
-parameter is removed.</p>
-
-<sample src="FeatureEnvyGood.cs" />
+<p>The refactored code is still appropriate, even if some data from the <code>Basket</code> class is necessary for the computation of the total price.
+For example, if the <code>Basket</code> class applies a bulk discount when a sufficient number of items are
+in the basket, an "additional discount" parameter can be added to
+<code>Item.getTotalPrice(..)</code>. Alternatively, the application of
+the discount can be performed in a method in <code>Basket</code> that calls
+<code>Item.getTotalPrice</code>.</p>
 
 </example>
 <references>

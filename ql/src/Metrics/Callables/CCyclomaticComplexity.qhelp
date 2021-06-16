@@ -3,38 +3,57 @@
   "qhelp.dtd">
 <qhelp>
 <overview>
-<p>This metric measures the number of linearly independent execution paths through methods. 
-Linearly independent paths are calculated using the control flow diagram for a piece of code. A 
-linearly independent path includes at least one new edge that has not been included in any linearly 
-independent path counted so far. Methods with a high cyclomatic complexity can be difficult to 
-understand and difficult to test because there are so many different ways they could execute.</p>
+<p>
+The cyclomatic complexity of a method (or constructor) is the number
+of possible linearly-independent execution paths through that method (see [Wikipedia]).
+It was originally introduced as a complexity measure by Thomas McCabe
+[McCabe].
+</p>
 
-<p>Consider this method:</p>
-<sample src="CCyclomaticComplexity.cs" />
-<p>The control flow diagram for through this method looks like this:</p>
-<img src="CCyclomaticComplexity.png" alt="Control Flow Diagram" />
-<p>The first linearly independent path through this method is one where the condition for every 
-branch point returns false. The path through the diagram would go Start &rarr; count&gt;10 &rarr; 
-timesLeft&gt;0 &rarr; End. There is also another path where the first condition returns true and 
-hence "The count is large" is printed. This counts as a second independent path because it adds the 
-edges from count&gt;10 &rarr; "The count is large" &rarr; timesLeft&gt;0 which have not been 
-included in the first path we counted. Likewise the second condition being true would add another 
-independent path through the switch statement and one of its cases. The switch statement has 4 
-cases that count as paths however one has already been counted in the previous path. As such the 
-switch statement adds another 3 independent paths through the method bringing the total cyclomatic 
-complexity to 6.</p>
+<p>A method with high cyclomatic complexity is typically difficult to
+understand and test.
+</p>
 
 </overview>
+<example>
+
+<sample src="CCyclomaticComplexity.java" />
+
+<p>
+The control flow graph for this method is as follows:
+</p>
+
+<img src="./CCyclomaticComplexity_ControlFlow.png" alt="Control Flow Diagram" />
+
+<p>
+As you can see from the graph, the number of linearly-independent execution
+paths through the method is 3. Therefore, the cyclomatic complexity is 3.</p>
+
+</example>
 <recommendation>
-<p>Complex methods should have parts of their functionality extracted to helper methods. This makes 
-testing easier because each helper method can be tested individually.</p>
+
+<p>
+Simplify methods that have a high cyclomatic complexity. For example,
+tidy up complex logic, and/or split methods into multiple smaller
+methods using the 'Extract Method' refactoring from [Fowler].
+</p>
+
+
 
 </recommendation>
 <references>
 
-  <li>Wikipedia. <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity">Cyclomatic complexity</a>.</li>
-  <li>Wikipedia. <a href="http://en.wikipedia.org/wiki/Control_flow_diagram">Control flow diagram</a>.</li>
-  <li>Wolfram MathWorld. <a href="http://mathworld.wolfram.com/LinearlyIndependent.html">Linearly Independent</a>.</li>
+
+<li>
+M. Fowler, <em>Refactoring</em>. Addison-Wesley, 1999.
+</li>
+<li>
+T. J. McCabe, <em>A Complexity Measure</em>. IEEE Transactions on Software Engineering, SE-2(4), December 1976.
+</li>
+<li>
+Wikipedia: <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity">Cyclomatic complexity</a>.
+</li>
+
 
 </references>
 </qhelp>

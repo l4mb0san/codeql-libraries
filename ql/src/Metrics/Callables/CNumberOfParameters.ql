@@ -1,18 +1,18 @@
 /**
- * @name Number of parameters per method/constructor/operator
- * @description Methods with lots of parameters are difficult to call correctly and might be taking on too many responsibilities.
+ * @name Number of parameters to methods
+ * @description The number of parameters of a method or constructor.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType callable
  * @metricAggregate avg max
+ * @id java/parameters-per-function
  * @tags testability
  *       complexity
  *       maintainability
- * @id cs/parameters-per-function
  */
 
-import csharp
+import java
 
 from Callable c
-where c.isSourceDeclaration()
-select c, c.getNumberOfParameters() as n order by n desc
+where c.fromSource()
+select c, c.getMetrics().getNumberOfParameters() as n order by n desc

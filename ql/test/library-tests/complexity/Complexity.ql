@@ -1,7 +1,5 @@
-import csharp
+import default
 
-from Callable f
-where
-  f.getName().matches("cc_") and // cc1, cc2, ...
-  f.fromSource()
+from MetricCallable f
+where f.getName().matches("cc_") // cc1, cc2, ...
 select f, f.getCyclomaticComplexity()

@@ -1,16 +1,16 @@
 /**
- * @id cs/examples/field-read
+ * @id java/examples/field-read
  * @name Read of field
- * @description Finds reads of 'VirtualAddress' (defined on 'Mono.Cecil.PE.Section').
+ * @description Finds reads of aField (defined on com.example.Class)
  * @tags field
  *       read
  */
 
-import csharp
+import java
 
 from Field f, FieldRead read
 where
-  f.hasName("VirtualAddress") and
-  f.getDeclaringType().hasQualifiedName("Mono.Cecil.PE.Section") and
-  f = read.getTarget()
+  f.hasName("aField") and
+  f.getDeclaringType().hasQualifiedName("com.example", "Class") and
+  f = read.getField()
 select read

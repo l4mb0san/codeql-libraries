@@ -1,19 +1,17 @@
 /**
  * @name Number of fields
- * @description Types with a large number of fields might have too many responsibilities.
+ * @description The number of fields in a class, excluding enum constants.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType reftype
  * @metricAggregate avg sum max
+ * @id java/fields-per-type
  * @tags maintainability
  *       complexity
- * @id cs/fields-per-type
  */
 
-import csharp
+import java
 
-from ValueOrRefType t, int n
-where
-  t.isSourceDeclaration() and
-  n = count(Field f | f.getDeclaringType() = t and not f instanceof EnumConstant)
-select t, n order by n desc
+from RefType t
+where t.fromSource()
+select t, t.getMetrics().getNumberOfExplicitFields() as n order by n desc

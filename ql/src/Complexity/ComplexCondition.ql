@@ -1,29 +1,31 @@
 /**
  * @name Complex condition
- * @description Boolean expressions should not be too deeply nested. Naming intermediate results as local variables will make the logic easier to read and understand.
+ * @description Very complex conditions are difficult to read and may include defects.
  * @kind problem
  * @problem.severity recommendation
- * @precision high
- * @id cs/complex-condition
+ * @precision low
+ * @id java/complex-condition
  * @tags testability
  *       readability
  */
 
-import csharp
+import java
 
-predicate nontrivialLogicalOperator(BinaryLogicalOperation e) {
-  not exists(BinaryLogicalOperation parent |
-    parent = e.getParent() and
-    parent.getOperator() = e.getOperator()
+predicate nontrivialLogicalOperator(BinaryExpr e) {
+  e instanceof LogicExpr and
+  (
+    not e.getParent().(Expr).getKind() = e.getKind() or
+    e.isParenthesized()
   )
 }
 
-predicate logicalParent(LogicalOperation op, LogicalOperation parent) { parent = op.getParent() }
+Expr getSimpleParent(Expr e) {
+  result = e.getParent() and
+  not result instanceof MethodAccess
+}
 
-from Expr e, int operators
+from Expr e
 where
-  not e.getParent() instanceof LogicalOperation and
-  operators =
-    count(BinaryLogicalOperation op | logicalParent*(op, e) and nontrivialLogicalOperator(op)) and
-  operators > 3
-select e.getLocation(), "Complex condition: too many logical operations in this expression."
+  not e.getParent() instanceof Expr and
+  strictcount(BinaryExpr op | getSimpleParent*(op) = e and nontrivialLogicalOperator(op)) > 5
+select e, "Complex condition: too many logical operations in this expression."

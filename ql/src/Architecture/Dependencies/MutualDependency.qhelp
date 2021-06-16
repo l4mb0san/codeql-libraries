@@ -4,7 +4,7 @@
 <qhelp>
 <overview>
 <p>
-A mutual dependency exists when two types depend directly on each other.
+A mutual dependency exists when two code entities (for example, types or packages) depend directly on each other.
 Mutual dependencies are caused by unwanted dependencies in one or both directions. There
 are many different kinds of dependency; here are a few examples of how an inter-type dependency
 from <code>T1</code> to <code>T2</code> can occur:
@@ -67,9 +67,9 @@ unwanted dependencies, see the references (particularly [Lakos]).
 </recommendation>
 <example>
 <p>In this example <code>BadModel</code> and <code>BadView</code> are mutually dependent.</p>
-<sample src="MutualDependencyBad.cs" />
-<p>The interface technique can be used to break the dependency between the model and the view. The <code>IModelListener</code> interface allows <code>BetterView</code> to interact with <code>BetterModel</code> without dependency.</p>
-<sample src="MutualDependencyGood.cs" /> 
+<sample src="MutualDependency.java" />
+<p>The interface technique can be used to break the dependency between the model and the view. The <code>ModelListener</code> interface allows <code>BetterView</code> to interact with <code>BetterModel</code> without dependency.</p>
+<sample src="MutualDependencyFix.java" /> 
 
 </example>
 <references>

@@ -3,12 +3,13 @@
  * @description The number of lines in each file.
  * @kind treemap
  * @treemap.warnOn highValues
+ * @id java/lines-per-file
  * @metricType file
  * @metricAggregate avg sum max
- * @id cs/lines-per-file
  */
 
-import csharp
+import java
 
-from SourceFile f
-select f, f.getNumberOfLines() as n order by n desc
+from File f, int n
+where n = f.getTotalNumberOfLines()
+select f, n order by n desc

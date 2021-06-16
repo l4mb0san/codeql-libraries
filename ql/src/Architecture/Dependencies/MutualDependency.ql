@@ -4,38 +4,32 @@
  * @kind problem
  * @problem.severity recommendation
  * @precision low
- * @id cs/mutually-dependent-types
+ * @id java/mutually-dependent-types
  * @tags testability
  *       maintainability
  *       modularity
  */
 
-import csharp
-import semmle.code.csharp.metrics.Coupling
+import java
 
-/** inner is nested (possibly more than one level deep) within outer */
-predicate nestedWithin(ValueOrRefType outer, NestedType inner) {
-  inner.getDeclaringType() = outer or
-  nestedWithin(outer, inner.getDeclaringType())
-}
-
-from ValueOrRefType t1, ValueOrRefType t2
+from RefType t1, RefType t2
 where
-  t1 != t2 and
   depends(t1, t2) and
   depends(t2, t1) and
-  // PREVENT SYMMETRICAL RESULTS
+  // Prevent symmetrical results.
   t1.getName() < t2.getName() and
-  // ADDITIONAL CONSTRAINTS
   t1.fromSource() and
   t2.fromSource() and
-  // EXCLUSIONS
+  // Exclusions.
   not (
-    nestedWithin(t1, t2) or
-    nestedWithin(t2, t1) or
+    t1 instanceof AnonymousClass or
+    t1 instanceof BoundedType or
+    t2 instanceof AnonymousClass or
+    t2 instanceof BoundedType or
     t1.getName().toLowerCase().matches("%visitor%") or
     t2.getName().toLowerCase().matches("%visitor%") or
-    t1.getAMember().getName().toLowerCase().matches("%visit%") or
-    t2.getAMember().getName().toLowerCase().matches("%visit%")
+    t1.getAMethod().getName().toLowerCase().matches("%visit%") or
+    t2.getAMethod().getName().toLowerCase().matches("%visit%") or
+    t1.getPackage() = t2.getPackage()
   )
 select t1, "This type and type $@ are mutually dependent.", t2, t2.getName()

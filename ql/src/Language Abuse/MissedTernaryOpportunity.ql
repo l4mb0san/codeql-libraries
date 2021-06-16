@@ -1,50 +1,76 @@
 /**
  * @name Missed ternary opportunity
- * @description An 'if' statement where both branches either (a) return or (b) write to the same variable can often be expressed more clearly using the '?' operator.
+ * @description An 'if' statement where both branches either
+ *             (a) return or (b) write to the same variable
+ *             can often be expressed more clearly using the '?' operator.
  * @kind problem
  * @problem.severity recommendation
- * @precision high
- * @id cs/missed-ternary-operator
+ * @precision low
+ * @id java/missed-ternary-operator
  * @tags maintainability
  *       language-features
  */
 
-import csharp
-import semmle.code.csharp.commons.StructuralComparison
+import java
 
-class StructuralComparisonConfig extends StructuralComparisonConfiguration {
-  StructuralComparisonConfig() { this = "MissedTernaryOpportunity" }
+predicate complicatedBranch(Stmt branch) {
+  any(ConditionalExpr ce).getParent*() = branch or
+  count(MethodAccess a | a.getParent*() = branch) > 1
+}
 
-  override predicate candidate(ControlFlowElement x, ControlFlowElement y) {
-    exists(IfStmt is, AssignExpr ae1 |
-      ae1 = is.getThen().stripSingletonBlocks().(ExprStmt).getExpr()
-    |
-      x = ae1.getLValue() and
-      exists(AssignExpr ae2 | ae2 = is.getElse().stripSingletonBlocks().(ExprStmt).getExpr() |
-        y = ae2.getLValue()
-      )
+predicate complicatedCondition(Expr cond) {
+  exists(Expr e | e = cond.getAChildExpr*() |
+    e instanceof AndLogicalExpr or
+    e instanceof OrLogicalExpr
+  )
+}
+
+predicate toCompare(Expr left, Expr right) {
+  exists(IfStmt is, AssignExpr at, AssignExpr ae |
+    at.getParent() = is.getThen() and
+    ae.getParent() = is.getElse()
+  |
+    left = at.getDest() and right = ae.getDest()
+    or
+    left = at.getDest().(VarAccess).getQualifier() and
+    right = ae.getDest().(VarAccess).getQualifier()
+  )
+}
+
+predicate sameVariable(VarAccess left, VarAccess right) {
+  toCompare(left, right) and
+  left.getVariable() = right.getVariable() and
+  (
+    exists(Expr q1, Expr q2 |
+      left.getQualifier() = q1 and
+      sameVariable(q1, q2) and
+      right.getQualifier() = q2
     )
-  }
-
-  IfStmt getIfStmt() {
-    exists(AssignExpr ae | ae = result.getThen().stripSingletonBlocks().(ExprStmt).getExpr() |
-      same(ae.getLValue(), _)
-    )
-  }
+    or
+    left.isLocal() and right.isLocal()
+  )
 }
 
 from IfStmt is, string what
 where
   (
-    is.getThen().stripSingletonBlocks() instanceof ReturnStmt and
-    is.getElse().stripSingletonBlocks() instanceof ReturnStmt and
+    is.getThen() instanceof ReturnStmt and
+    is.getElse() instanceof ReturnStmt and
     what = "return"
     or
-    exists(StructuralComparisonConfig c |
-      is = c.getIfStmt() and
+    exists(AssignExpr at, AssignExpr ae |
+      at.getParent() = is.getThen() and
+      ae.getParent() = is.getElse() and
+      sameVariable(at.getDest(), ae.getDest()) and
       what = "write to the same variable"
     )
   ) and
-  not exists(IfStmt other | is = other.getElse())
+  // Exclusions.
+  not (
+    exists(IfStmt other | is = other.getElse()) or
+    complicatedCondition(is.getCondition()) or
+    complicatedBranch(is.getThen()) or
+    complicatedBranch(is.getElse())
+  )
 select is,
   "Both branches of this 'if' statement " + what + " - consider using '?' to express intent better."

@@ -1,17 +1,16 @@
 /**
  * @name Number of tests
- * @description The number of test methods defined in a file.
+ * @description The number of test methods defined in a compilation unit.
  * @kind treemap
- * @treemap.warnOn highValues
+ * @treemap.warnOn lowValues
  * @metricType file
  * @metricAggregate avg sum max
- * @id cs/tests-in-files
+ * @id java/tests-in-files
  * @tags maintainability
  */
 
-import csharp
-import semmle.code.csharp.frameworks.Test
+import java
 
-from SourceFile f, int n
-where n = strictcount(TestMethod test | test.fromSource() and test.getFile() = f)
+from CompilationUnit f, int n
+where n = strictcount(TestMethod test | test.fromSource() and test.getCompilationUnit() = f)
 select f, n order by n desc

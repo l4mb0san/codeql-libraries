@@ -1,17 +1,17 @@
 /**
- * @name Incoming dependencies
- * @description A large number of incoming type dependencies make a type difficult to change.
+ * @name Incoming type dependencies
+ * @description The number of types that depend on a type.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType reftype
  * @metricAggregate avg max
+ * @id java/incoming-type-dependencies
  * @tags changeability
  *       modularity
- * @id cs/incoming-type-dependencies
  */
 
-import csharp
+import java
 
-from ValueOrRefType t
-where t.isSourceDeclaration()
-select t, t.getAfferentCoupling() as n order by n desc
+from RefType t
+where t.fromSource()
+select t, t.getMetrics().getAfferentCoupling() as n order by n desc

@@ -1,25 +1,20 @@
 /**
- * @name Size of type APIs
- * @description Types with a large public API might be difficult to use and might have too many responsibilities.
+ * @name Size of a type's API
+ * @description The number of public methods in a public class.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType reftype
  * @metricAggregate avg sum max
+ * @id java/public-functions-per-type
  * @tags testability
  *       modularity
- * @id cs/public-functions-per-type
  */
 
-import csharp
+import java
 
-from ValueOrRefType t, int n
+from Class c, int n
 where
-  t.isSourceDeclaration() and
-  t.isPublic() and
-  n =
-    count(Method m | m.getDeclaringType() = t and m.isPublic()) +
-      count(Operator o | o.getDeclaringType() = t and o.isPublic()) +
-      count(Property p | p.getDeclaringType() = t and p.isPublic()) +
-      count(Indexer i | i.getDeclaringType() = t and i.isPublic()) +
-      count(Event e | e.getDeclaringType() = t and e.isPublic())
-select t, n order by n desc
+  c.fromSource() and
+  c.isPublic() and
+  n = count(Method m | c.getAMethod() = m and m.isPublic())
+select c, n order by n desc

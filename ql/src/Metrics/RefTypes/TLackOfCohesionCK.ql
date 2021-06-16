@@ -1,17 +1,17 @@
 /**
- * @name Lack of cohesion (CK)
- * @description Types that lack cohesion (as defined by Chidamber and Kemerer) often have too many responsibilities.
+ * @name Lack of type cohesion (CK)
+ * @description Lack of cohesion for a class as defined by Chidamber and Kemerer.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType reftype
  * @metricAggregate avg max
+ * @id java/lack-of-cohesion-ck
  * @tags modularity
  *       maintainability
- * @id cs/lack-of-cohesion-ck
  */
 
-import csharp
+import java
 
-from ValueOrRefType t
-where t.isSourceDeclaration()
-select t, t.getLackOfCohesionCK() as n order by n desc
+from RefType t
+where t.fromSource()
+select t, t.getMetrics().getLackOfCohesionCK() as n order by n desc

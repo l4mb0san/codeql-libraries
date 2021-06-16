@@ -1,16 +1,16 @@
 /**
  * @name Number of classes
- * @description Files with a large number of classes are difficult to read. Additionally the structure of the project is not reflected in the file system.
+ * @description The number of classes in a compilation unit.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType file
  * @metricAggregate avg sum max
+ * @id java/classes-per-file
  * @tags maintainability
- * @id cs/classes-per-file
  */
 
-import csharp
+import java
 
-from SourceFile f, int n
-where n = count(Class c | c.getFile() = f and c.isSourceDeclaration())
+from CompilationUnit f, int n
+where n = count(Class c | c.fromSource() and c.getCompilationUnit() = f)
 select f, n order by n desc

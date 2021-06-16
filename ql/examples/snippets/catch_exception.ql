@@ -1,14 +1,14 @@
 /**
- * @id cs/examples/catch-exception
+ * @id java/examples/catch-exception
  * @name Catch exception
- * @description Finds places where we catch exceptions of type 'System.IO.IOException'.
+ * @description Finds places where we catch exceptions of type com.example.AnException
  * @tags catch
  *       try
  *       exception
  */
 
-import csharp
+import java
 
 from CatchClause catch
-where catch.getCaughtExceptionType().hasQualifiedName("System.IO.IOException")
+where catch.getACaughtType().hasQualifiedName("com.example", "AnException")
 select catch

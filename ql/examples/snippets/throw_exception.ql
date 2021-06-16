@@ -1,13 +1,13 @@
 /**
- * @id cs/examples/throw-exception
- * @name Throw exception of given type
- * @description Finds places where we throw 'System.IO.IOException' or one of its subtypes.
+ * @id java/examples/throw-exception
+ * @name Throw exception of type
+ * @description Finds places where we throw com.example.AnException or one of its subtypes
  * @tags throw
  *       exception
  */
 
-import csharp
+import java
 
 from ThrowStmt throw
-where throw.getThrownExceptionType().getBaseClass*().hasQualifiedName("System.IO.IOException")
-select throw
+where throw.getThrownExceptionType().getASupertype*().hasQualifiedName("com.example", "AnException")
+select throw, "Don't throw com.example.AnException"

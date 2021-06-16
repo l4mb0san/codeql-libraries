@@ -1,17 +1,17 @@
 /**
- * @name Lines of comment per method
- * @description Methods with few lines of comment might not have sufficient documentation to make them understandable.
+ * @name Lines of comment in methods
+ * @description The number of comment lines in a method.
  * @kind treemap
  * @treemap.warnOn lowValues
  * @metricType callable
  * @metricAggregate avg sum max
+ * @id java/lines-of-comment-per-function
  * @tags maintainability
  *       documentation
- * @id cs/lines-of-comment-per-function
  */
 
-import csharp
+import java
 
 from Callable c
-where c.isSourceDeclaration()
-select c, c.getNumberOfLinesOfComments() as n order by n desc
+where c.fromSource()
+select c, c.getMetrics().getNumberOfCommentLines() as n order by n desc

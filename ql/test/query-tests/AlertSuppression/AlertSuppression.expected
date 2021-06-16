@@ -1,54 +1,58 @@
-| AlertSuppression.cs:1:16:1:22 | // ... | lgtm | lgtm | AlertSuppression.cs:1:1:1:22 | suppression range |
-| AlertSuppression.cs:2:1:2:26 | // ... | lgtm[cs/unused-reftype] | lgtm[cs/unused-reftype] | AlertSuppression.cs:2:1:2:26 | suppression range |
-| AlertSuppression.cs:3:1:3:43 | // ... | lgtm[cs/unused-reftype, cs/unused-field] | lgtm[cs/unused-reftype, cs/unused-field] | AlertSuppression.cs:3:1:3:43 | suppression range |
-| AlertSuppression.cs:4:1:4:22 | // ... | lgtm[@tag:nullness] | lgtm[@tag:nullness] | AlertSuppression.cs:4:1:4:22 | suppression range |
-| AlertSuppression.cs:5:1:5:44 | // ... | lgtm[@tag:useless-code,cs/unused-reftype] | lgtm[@tag:useless-code,cs/unused-reftype] | AlertSuppression.cs:5:1:5:44 | suppression range |
-| AlertSuppression.cs:6:1:6:28 | // ... | lgtm[@expires:2017-06-11] | lgtm[@expires:2017-06-11] | AlertSuppression.cs:6:1:6:28 | suppression range |
-| AlertSuppression.cs:7:1:7:58 | // ... | lgtm[cs/unused-reftype] because I know better than lgtm | lgtm[cs/unused-reftype] | AlertSuppression.cs:7:1:7:58 | suppression range |
-| AlertSuppression.cs:8:1:8:18 | // ... | lgtm: blah blah | lgtm | AlertSuppression.cs:8:1:8:18 | suppression range |
-| AlertSuppression.cs:9:1:9:32 | // ... | lgtm blah blah #falsepositive | lgtm | AlertSuppression.cs:9:1:9:32 | suppression range |
-| AlertSuppression.cs:10:1:10:27 | // ... | lgtm  [cs/unused-reftype] | lgtm  [cs/unused-reftype] | AlertSuppression.cs:10:1:10:27 | suppression range |
-| AlertSuppression.cs:11:1:11:10 | /* ... */ | lgtm | lgtm | AlertSuppression.cs:11:1:11:10 | suppression range |
-| AlertSuppression.cs:12:1:12:9 | // ... | lgtm[] | lgtm[] | AlertSuppression.cs:12:1:12:9 | suppression range |
-| AlertSuppression.cs:14:1:14:6 | // ... | lgtm | lgtm | AlertSuppression.cs:14:1:14:6 | suppression range |
-| AlertSuppression.cs:15:1:15:8 | // ... | lgtm | lgtm | AlertSuppression.cs:15:1:15:8 | suppression range |
-| AlertSuppression.cs:16:1:16:27 | // ... | lgtm [cs/unused-reftype] | lgtm [cs/unused-reftype] | AlertSuppression.cs:16:1:16:27 | suppression range |
-| AlertSuppression.cs:19:1:19:12 | // ... | foo; lgtm | lgtm | AlertSuppression.cs:19:1:19:12 | suppression range |
-| AlertSuppression.cs:20:1:20:31 | // ... | foo; lgtm[cs/unused-reftype] | lgtm[cs/unused-reftype] | AlertSuppression.cs:20:1:20:31 | suppression range |
-| AlertSuppression.cs:22:1:22:30 | // ... | foo lgtm[cs/unused-reftype] | lgtm[cs/unused-reftype] | AlertSuppression.cs:22:1:22:30 | suppression range |
-| AlertSuppression.cs:24:1:24:34 | // ... | foo lgtm[cs/unused-reftype] bar | lgtm[cs/unused-reftype] | AlertSuppression.cs:24:1:24:34 | suppression range |
-| AlertSuppression.cs:25:1:25:8 | // ... | LGTM! | LGTM | AlertSuppression.cs:25:1:25:8 | suppression range |
-| AlertSuppression.cs:26:1:26:26 | // ... | LGTM[cs/unused-reftype] | LGTM[cs/unused-reftype] | AlertSuppression.cs:26:1:26:26 | suppression range |
-| AlertSuppression.cs:27:1:27:52 | // ... | lgtm[cs/unused-reftype] and lgtm[cs/unused-field] | lgtm[cs/unused-field] | AlertSuppression.cs:27:1:27:52 | suppression range |
-| AlertSuppression.cs:27:1:27:52 | // ... | lgtm[cs/unused-reftype] and lgtm[cs/unused-field] | lgtm[cs/unused-reftype] | AlertSuppression.cs:27:1:27:52 | suppression range |
-| AlertSuppression.cs:28:1:28:32 | // ... | lgtm[cs/unused-reftype]; lgtm | lgtm | AlertSuppression.cs:28:1:28:32 | suppression range |
-| AlertSuppression.cs:28:1:28:32 | // ... | lgtm[cs/unused-reftype]; lgtm | lgtm[cs/unused-reftype] | AlertSuppression.cs:28:1:28:32 | suppression range |
-| AlertSuppressionWindows.cs:1:17:1:23 | // ... | lgtm | lgtm | AlertSuppressionWindows.cs:1:1:1:23 | suppression range |
-| AlertSuppressionWindows.cs:2:1:2:26 | // ... | lgtm[cs/unused-reftype] | lgtm[cs/unused-reftype] | AlertSuppressionWindows.cs:2:1:2:26 | suppression range |
-| AlertSuppressionWindows.cs:3:1:3:43 | // ... | lgtm[cs/unused-reftype, cs/unused-field] | lgtm[cs/unused-reftype, cs/unused-field] | AlertSuppressionWindows.cs:3:1:3:43 | suppression range |
-| AlertSuppressionWindows.cs:4:1:4:22 | // ... | lgtm[@tag:nullness] | lgtm[@tag:nullness] | AlertSuppressionWindows.cs:4:1:4:22 | suppression range |
-| AlertSuppressionWindows.cs:5:1:5:44 | // ... | lgtm[@tag:useless-code,cs/unused-reftype] | lgtm[@tag:useless-code,cs/unused-reftype] | AlertSuppressionWindows.cs:5:1:5:44 | suppression range |
-| AlertSuppressionWindows.cs:6:1:6:28 | // ... | lgtm[@expires:2017-06-11] | lgtm[@expires:2017-06-11] | AlertSuppressionWindows.cs:6:1:6:28 | suppression range |
-| AlertSuppressionWindows.cs:7:1:7:58 | // ... | lgtm[cs/unused-reftype] because I know better than lgtm | lgtm[cs/unused-reftype] | AlertSuppressionWindows.cs:7:1:7:58 | suppression range |
-| AlertSuppressionWindows.cs:8:1:8:18 | // ... | lgtm: blah blah | lgtm | AlertSuppressionWindows.cs:8:1:8:18 | suppression range |
-| AlertSuppressionWindows.cs:9:1:9:32 | // ... | lgtm blah blah #falsepositive | lgtm | AlertSuppressionWindows.cs:9:1:9:32 | suppression range |
-| AlertSuppressionWindows.cs:10:1:10:27 | // ... | lgtm  [cs/unused-reftype] | lgtm  [cs/unused-reftype] | AlertSuppressionWindows.cs:10:1:10:27 | suppression range |
-| AlertSuppressionWindows.cs:11:1:11:10 | /* ... */ | lgtm | lgtm | AlertSuppressionWindows.cs:11:1:11:10 | suppression range |
-| AlertSuppressionWindows.cs:12:1:12:9 | // ... | lgtm[] | lgtm[] | AlertSuppressionWindows.cs:12:1:12:9 | suppression range |
-| AlertSuppressionWindows.cs:14:1:14:6 | // ... | lgtm | lgtm | AlertSuppressionWindows.cs:14:1:14:6 | suppression range |
-| AlertSuppressionWindows.cs:15:1:15:8 | // ... | lgtm | lgtm | AlertSuppressionWindows.cs:15:1:15:8 | suppression range |
-| AlertSuppressionWindows.cs:16:1:16:27 | // ... | lgtm [cs/unused-reftype] | lgtm [cs/unused-reftype] | AlertSuppressionWindows.cs:16:1:16:27 | suppression range |
-| AlertSuppressionWindows.cs:19:1:19:12 | // ... | foo; lgtm | lgtm | AlertSuppressionWindows.cs:19:1:19:12 | suppression range |
-| AlertSuppressionWindows.cs:20:1:20:31 | // ... | foo; lgtm[cs/unused-reftype] | lgtm[cs/unused-reftype] | AlertSuppressionWindows.cs:20:1:20:31 | suppression range |
-| AlertSuppressionWindows.cs:22:1:22:30 | // ... | foo lgtm[cs/unused-reftype] | lgtm[cs/unused-reftype] | AlertSuppressionWindows.cs:22:1:22:30 | suppression range |
-| AlertSuppressionWindows.cs:24:1:24:34 | // ... | foo lgtm[cs/unused-reftype] bar | lgtm[cs/unused-reftype] | AlertSuppressionWindows.cs:24:1:24:34 | suppression range |
-| AlertSuppressionWindows.cs:25:1:25:8 | // ... | LGTM! | LGTM | AlertSuppressionWindows.cs:25:1:25:8 | suppression range |
-| AlertSuppressionWindows.cs:26:1:26:26 | // ... | LGTM[cs/unused-reftype] | LGTM[cs/unused-reftype] | AlertSuppressionWindows.cs:26:1:26:26 | suppression range |
-| AlertSuppressionWindows.cs:27:1:27:52 | // ... | lgtm[cs/unused-reftype] and lgtm[cs/unused-field] | lgtm[cs/unused-field] | AlertSuppressionWindows.cs:27:1:27:52 | suppression range |
-| AlertSuppressionWindows.cs:27:1:27:52 | // ... | lgtm[cs/unused-reftype] and lgtm[cs/unused-field] | lgtm[cs/unused-reftype] | AlertSuppressionWindows.cs:27:1:27:52 | suppression range |
-| AlertSuppressionWindows.cs:28:1:28:32 | // ... | lgtm[cs/unused-reftype]; lgtm | lgtm | AlertSuppressionWindows.cs:28:1:28:32 | suppression range |
-| AlertSuppressionWindows.cs:28:1:28:32 | // ... | lgtm[cs/unused-reftype]; lgtm | lgtm[cs/unused-reftype] | AlertSuppressionWindows.cs:28:1:28:32 | suppression range |
-| AlertSuppressionWindows.cs:29:1:29:12 | /* ... */ | lgtm[] | lgtm[] | AlertSuppressionWindows.cs:29:1:29:12 | suppression range |
-| AlertSuppressionWindows.cs:30:1:30:29 | /* ... */ | lgtm[cs/unused-reftype] | lgtm[cs/unused-reftype] | AlertSuppressionWindows.cs:30:1:30:29 | suppression range |
-| AlertSuppressionWindows.cs:35:1:35:43 | /* ... */ | lgtm[@tag:nullness,cs/unused-reftype] | lgtm[@tag:nullness,cs/unused-reftype] | AlertSuppressionWindows.cs:35:1:35:43 | suppression range |
-| AlertSuppressionWindows.cs:36:1:36:25 | /* ... */ | lgtm[@tag:nullness] | lgtm[@tag:nullness] | AlertSuppressionWindows.cs:36:1:36:25 | suppression range |
+| Test.java:1:15:1:21 | // lgtm |  lgtm | lgtm | Test.java:1:1:1:21 | suppression range |
+| Test.java:2:1:2:35 | // lgtm[java/confusing-method-name] |  lgtm[java/confusing-method-name] | lgtm[java/confusing-method-name] | Test.java:2:1:2:35 | suppression range |
+| Test.java:3:1:3:70 | // lgtm[java/confusing-method-name, java/non-short-circuit-evaluation] |  lgtm[java/confusing-method-name, java/non-short-circuit-evaluation] | lgtm[java/confusing-method-name, java/non-short-circuit-evaluation] | Test.java:3:1:3:70 | suppression range |
+| Test.java:4:1:4:24 | // lgtm[@tag:exceptions] |  lgtm[@tag:exceptions] | lgtm[@tag:exceptions] | Test.java:4:1:4:24 | suppression range |
+| Test.java:5:1:5:51 | // lgtm[@tag:exceptions,java/confusing-method-name] |  lgtm[@tag:exceptions,java/confusing-method-name] | lgtm[@tag:exceptions,java/confusing-method-name] | Test.java:5:1:5:51 | suppression range |
+| Test.java:6:1:6:28 | // lgtm[@expires:2017-06-11] |  lgtm[@expires:2017-06-11] | lgtm[@expires:2017-06-11] | Test.java:6:1:6:28 | suppression range |
+| Test.java:7:1:7:81 | // lgtm[java/confusing-method-name] does not seem confusing despite alert by lgtm |  lgtm[java/confusing-method-name] does not seem confusing despite alert by lgtm | lgtm[java/confusing-method-name] | Test.java:7:1:7:81 | suppression range |
+| Test.java:8:1:8:18 | // lgtm: blah blah |  lgtm: blah blah | lgtm | Test.java:8:1:8:18 | suppression range |
+| Test.java:9:1:9:32 | // lgtm blah blah #falsepositive |  lgtm blah blah #falsepositive | lgtm | Test.java:9:1:9:32 | suppression range |
+| Test.java:10:1:10:36 | //lgtm  [java/confusing-method-name] | lgtm  [java/confusing-method-name] | lgtm  [java/confusing-method-name] | Test.java:10:1:10:36 | suppression range |
+| Test.java:11:1:11:10 | /* lgtm */ | lgtm | lgtm | Test.java:11:1:11:10 | suppression range |
+| Test.java:12:1:12:9 | // lgtm[] |  lgtm[] | lgtm[] | Test.java:12:1:12:9 | suppression range |
+| Test.java:14:1:14:6 | //lgtm | lgtm | lgtm | Test.java:14:1:14:6 | suppression range |
+| Test.java:15:1:15:7 | //\tlgtm | \tlgtm | lgtm | Test.java:15:1:15:7 | suppression range |
+| Test.java:16:1:16:36 | // lgtm\t[java/confusing-method-name] |  lgtm\t[java/confusing-method-name] | lgtm\t[java/confusing-method-name] | Test.java:16:1:16:36 | suppression range |
+| Test.java:19:1:19:12 | // foo; lgtm |  foo; lgtm | lgtm | Test.java:19:1:19:12 | suppression range |
+| Test.java:20:1:20:40 | // foo; lgtm[java/confusing-method-name] |  foo; lgtm[java/confusing-method-name] | lgtm[java/confusing-method-name] | Test.java:20:1:20:40 | suppression range |
+| Test.java:22:1:22:39 | // foo lgtm[java/confusing-method-name] |  foo lgtm[java/confusing-method-name] | lgtm[java/confusing-method-name] | Test.java:22:1:22:39 | suppression range |
+| Test.java:24:1:24:43 | // foo lgtm[java/confusing-method-name] bar |  foo lgtm[java/confusing-method-name] bar | lgtm[java/confusing-method-name] | Test.java:24:1:24:43 | suppression range |
+| Test.java:25:1:25:8 | // LGTM! |  LGTM! | LGTM | Test.java:25:1:25:8 | suppression range |
+| Test.java:26:1:26:35 | // LGTM[java/confusing-method-name] |  LGTM[java/confusing-method-name] | LGTM[java/confusing-method-name] | Test.java:26:1:26:35 | suppression range |
+| Test.java:27:1:27:78 | //lgtm[java/confusing-method-name] and lgtm[java/non-short-circuit-evaluation] | lgtm[java/confusing-method-name] and lgtm[java/non-short-circuit-evaluation] | lgtm[java/confusing-method-name] | Test.java:27:1:27:78 | suppression range |
+| Test.java:27:1:27:78 | //lgtm[java/confusing-method-name] and lgtm[java/non-short-circuit-evaluation] | lgtm[java/confusing-method-name] and lgtm[java/non-short-circuit-evaluation] | lgtm[java/non-short-circuit-evaluation] | Test.java:27:1:27:78 | suppression range |
+| Test.java:28:1:28:40 | //lgtm[java/confusing-method-name]; lgtm | lgtm[java/confusing-method-name]; lgtm | lgtm | Test.java:28:1:28:40 | suppression range |
+| Test.java:28:1:28:40 | //lgtm[java/confusing-method-name]; lgtm | lgtm[java/confusing-method-name]; lgtm | lgtm[java/confusing-method-name] | Test.java:28:1:28:40 | suppression range |
+| Test.java:29:1:29:12 | /* lgtm[] */ | lgtm[] | lgtm[] | Test.java:29:1:29:12 | suppression range |
+| Test.java:30:1:30:38 | /* lgtm[java/confusing-method-name] */ | lgtm[java/confusing-method-name] | lgtm[java/confusing-method-name] | Test.java:30:1:30:38 | suppression range |
+| Test.java:36:1:36:52 | /* lgtm[@tag:nullness,java/confusing-method-name] */ | lgtm[@tag:nullness,java/confusing-method-name] | lgtm[@tag:nullness,java/confusing-method-name] | Test.java:36:1:36:52 | suppression range |
+| Test.java:37:1:37:25 | /* lgtm[@tag:nullness] */ | lgtm[@tag:nullness] | lgtm[@tag:nullness] | Test.java:37:1:37:25 | suppression range |
+| TestWindows.java:1:22:1:29 | // lgtm |  lgtm | lgtm | TestWindows.java:1:1:1:29 | suppression range |
+| TestWindows.java:2:1:2:36 | // lgtm[java/confusing-method-name] |  lgtm[java/confusing-method-name] | lgtm[java/confusing-method-name] | TestWindows.java:2:1:2:36 | suppression range |
+| TestWindows.java:3:1:3:71 | // lgtm[java/confusing-method-name, java/non-short-circuit-evaluation] |  lgtm[java/confusing-method-name, java/non-short-circuit-evaluation] | lgtm[java/confusing-method-name, java/non-short-circuit-evaluation] | TestWindows.java:3:1:3:71 | suppression range |
+| TestWindows.java:4:1:4:25 | // lgtm[@tag:exceptions] |  lgtm[@tag:exceptions] | lgtm[@tag:exceptions] | TestWindows.java:4:1:4:25 | suppression range |
+| TestWindows.java:5:1:5:52 | // lgtm[@tag:exceptions,java/confusing-method-name] |  lgtm[@tag:exceptions,java/confusing-method-name] | lgtm[@tag:exceptions,java/confusing-method-name] | TestWindows.java:5:1:5:52 | suppression range |
+| TestWindows.java:6:1:6:29 | // lgtm[@expires:2017-06-11] |  lgtm[@expires:2017-06-11] | lgtm[@expires:2017-06-11] | TestWindows.java:6:1:6:29 | suppression range |
+| TestWindows.java:7:1:7:82 | // lgtm[java/confusing-method-name] does not seem confusing despite alert by lgtm |  lgtm[java/confusing-method-name] does not seem confusing despite alert by lgtm | lgtm[java/confusing-method-name] | TestWindows.java:7:1:7:82 | suppression range |
+| TestWindows.java:8:1:8:19 | // lgtm: blah blah |  lgtm: blah blah | lgtm | TestWindows.java:8:1:8:19 | suppression range |
+| TestWindows.java:9:1:9:33 | // lgtm blah blah #falsepositive |  lgtm blah blah #falsepositive | lgtm | TestWindows.java:9:1:9:33 | suppression range |
+| TestWindows.java:10:1:10:37 | //lgtm  [java/confusing-method-name] | lgtm  [java/confusing-method-name] | lgtm  [java/confusing-method-name] | TestWindows.java:10:1:10:37 | suppression range |
+| TestWindows.java:11:1:11:10 | /* lgtm */ | lgtm | lgtm | TestWindows.java:11:1:11:10 | suppression range |
+| TestWindows.java:12:1:12:10 | // lgtm[] |  lgtm[] | lgtm[] | TestWindows.java:12:1:12:10 | suppression range |
+| TestWindows.java:14:1:14:7 | //lgtm | lgtm | lgtm | TestWindows.java:14:1:14:7 | suppression range |
+| TestWindows.java:15:1:15:8 | //\tlgtm | \tlgtm | lgtm | TestWindows.java:15:1:15:8 | suppression range |
+| TestWindows.java:16:1:16:37 | // lgtm\t[java/confusing-method-name] |  lgtm\t[java/confusing-method-name] | lgtm\t[java/confusing-method-name] | TestWindows.java:16:1:16:37 | suppression range |
+| TestWindows.java:19:1:19:13 | // foo; lgtm |  foo; lgtm | lgtm | TestWindows.java:19:1:19:13 | suppression range |
+| TestWindows.java:20:1:20:41 | // foo; lgtm[java/confusing-method-name] |  foo; lgtm[java/confusing-method-name] | lgtm[java/confusing-method-name] | TestWindows.java:20:1:20:41 | suppression range |
+| TestWindows.java:22:1:22:40 | // foo lgtm[java/confusing-method-name] |  foo lgtm[java/confusing-method-name] | lgtm[java/confusing-method-name] | TestWindows.java:22:1:22:40 | suppression range |
+| TestWindows.java:24:1:24:44 | // foo lgtm[java/confusing-method-name] bar |  foo lgtm[java/confusing-method-name] bar | lgtm[java/confusing-method-name] | TestWindows.java:24:1:24:44 | suppression range |
+| TestWindows.java:25:1:25:9 | // LGTM! |  LGTM! | LGTM | TestWindows.java:25:1:25:9 | suppression range |
+| TestWindows.java:26:1:26:36 | // LGTM[java/confusing-method-name] |  LGTM[java/confusing-method-name] | LGTM[java/confusing-method-name] | TestWindows.java:26:1:26:36 | suppression range |
+| TestWindows.java:27:1:27:79 | //lgtm[java/confusing-method-name] and lgtm[java/non-short-circuit-evaluation] | lgtm[java/confusing-method-name] and lgtm[java/non-short-circuit-evaluation] | lgtm[java/confusing-method-name] | TestWindows.java:27:1:27:79 | suppression range |
+| TestWindows.java:27:1:27:79 | //lgtm[java/confusing-method-name] and lgtm[java/non-short-circuit-evaluation] | lgtm[java/confusing-method-name] and lgtm[java/non-short-circuit-evaluation] | lgtm[java/non-short-circuit-evaluation] | TestWindows.java:27:1:27:79 | suppression range |
+| TestWindows.java:28:1:28:41 | //lgtm[java/confusing-method-name]; lgtm | lgtm[java/confusing-method-name]; lgtm | lgtm | TestWindows.java:28:1:28:41 | suppression range |
+| TestWindows.java:28:1:28:41 | //lgtm[java/confusing-method-name]; lgtm | lgtm[java/confusing-method-name]; lgtm | lgtm[java/confusing-method-name] | TestWindows.java:28:1:28:41 | suppression range |
+| TestWindows.java:29:1:29:12 | /* lgtm[] */ | lgtm[] | lgtm[] | TestWindows.java:29:1:29:12 | suppression range |
+| TestWindows.java:30:1:30:38 | /* lgtm[java/confusing-method-name] */ | lgtm[java/confusing-method-name] | lgtm[java/confusing-method-name] | TestWindows.java:30:1:30:38 | suppression range |
+| TestWindows.java:36:1:36:52 | /* lgtm[@tag:nullness,java/confusing-method-name] */ | lgtm[@tag:nullness,java/confusing-method-name] | lgtm[@tag:nullness,java/confusing-method-name] | TestWindows.java:36:1:36:52 | suppression range |
+| TestWindows.java:37:1:37:25 | /* lgtm[@tag:nullness] */ | lgtm[@tag:nullness] | lgtm[@tag:nullness] | TestWindows.java:37:1:37:25 | suppression range |

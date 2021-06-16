@@ -1,16 +1,16 @@
 /**
- * @id cs/examples/override-method
+ * @id java/examples/override-method
  * @name Override of method
- * @description Finds methods that directly override 'Object.ToString'.
+ * @description Finds methods that override com.example.Class.baseMethod
  * @tags method
  *       override
  */
 
-import csharp
+import java
 
 from Method override, Method base
 where
-  base.hasName("ToString") and
-  base.getDeclaringType().hasQualifiedName("System.Object") and
-  base.getAnOverrider() = override
+  base.hasName("baseMethod") and
+  base.getDeclaringType().hasQualifiedName("com.example", "Class") and
+  override.overrides+(base)
 select override

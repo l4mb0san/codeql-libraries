@@ -4,22 +4,18 @@
  *              from its own class violates the principle of putting data and behavior in the same
  *              place.
  * @kind problem
+ * @problem.severity warning
  * @precision low
- * @problem.severity recommendation
- * @id cs/method-feature-envy
- * @tags changeability
- *       maintainability
+ * @id java/feature-envy
+ * @tags maintainability
  *       modularity
  */
 
-import csharp
+import java
 
 Member getAUsedMember(Method m) {
-  exists(MemberAccess ma | ma.getEnclosingCallable() = m |
-    result = ma.getTarget().getUnboundDeclaration()
-  )
-  or
-  exists(Call c | c.getEnclosingCallable() = m | result = c.getTarget().getUnboundDeclaration())
+  result.(Field).getAnAccess().getEnclosingCallable() = m or
+  result.(Callable).getAReference().getEnclosingCallable() = m
 }
 
 int dependencyCount(Method source, RefType target) {
@@ -28,10 +24,12 @@ int dependencyCount(Method source, RefType target) {
 
 predicate methodDependsOn(Method m, RefType target) { exists(dependencyCount(m, target)) }
 
-predicate dependsOn(RefType source, RefType target) { methodDependsOn(source.getAMethod(), target) }
+predicate dependsOn(RefType source, RefType target) {
+  methodDependsOn(source.getACallable(), target)
+}
 
 int selfDependencyCount(Method source) {
-  result = sum(dependencyCount(source, source.getDeclaringType+()))
+  result = sum(dependencyCount(source, source.getDeclaringType().getEnclosingType*()))
 }
 
 predicate dependsHighlyOn(Method source, RefType target, int selfCount, int depCount) {
@@ -46,21 +44,21 @@ predicate query(Method m, RefType targetType, int selfCount, int depCount) {
     dependsHighlyOn(m, targetType, selfCount, depCount) and
     // Interfaces are depended upon by their very nature
     not targetType instanceof Interface and
-    // Do not move extension methods
-    not m instanceof ExtensionMethod and
+    // Anonymous classes are often used as callbacks, which heavily depend on other classes
+    not sourceType instanceof AnonymousClass and
+    // Do not move initializer methods
+    not m instanceof InitializerMethod and
     // Do not move up/down the class hierarchy
     not (
-      sourceType.getABaseType*().getUnboundDeclaration() = targetType or
-      targetType.getABaseType*().getUnboundDeclaration() = sourceType
+      sourceType.getASupertype*().getSourceDeclaration() = targetType or
+      targetType.getASupertype*().getSourceDeclaration() = sourceType
     ) and
     // Do not move between nested types
-    not (sourceType.getDeclaringType*() = targetType or targetType.getDeclaringType*() = sourceType) and
+    not (sourceType.getEnclosingType*() = targetType or targetType.getEnclosingType*() = sourceType) and
+    // Tests are allowed to be invasive and depend on the tested classes highly
+    not sourceType instanceof TestClass and
     // Check that the target type already depends on every type used by the method
-    forall(RefType dependency | methodDependsOn(m, dependency) |
-      dependsOn(targetType, dependency) or
-      targetType = dependency or
-      dependency.getNamespace().hasName("System")
-    )
+    forall(RefType dependency | methodDependsOn(m, dependency) | dependsOn(targetType, dependency))
   )
 }
 

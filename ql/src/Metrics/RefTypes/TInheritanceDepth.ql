@@ -1,17 +1,17 @@
 /**
- * @name Inheritance depth
- * @description Types that are many levels deep in an inheritance hierarchy are difficult to understand.
+ * @name Type inheritance depth
+ * @description The depth of a reference type in the inheritance hierarchy.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType reftype
  * @metricAggregate avg max
+ * @id java/inheritance-depth
  * @tags changeability
  *       modularity
- * @id cs/inheritance-depth
  */
 
-import csharp
+import java
 
-from ValueOrRefType t
-where t.isSourceDeclaration()
-select t, t.getInheritanceDepth() as n order by n desc
+from RefType t
+where t.fromSource()
+select t, t.getMetrics().getInheritanceDepth() as n order by n desc

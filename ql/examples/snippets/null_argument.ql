@@ -1,7 +1,7 @@
 /**
- * @id cs/examples/null-argument
+ * @id java/examples/null-argument
  * @name Add null to collection
- * @description Finds places where we add 'null' to a collection.
+ * @description Finds places where we add null to a collection
  * @tags null
  *       parameter
  *       argument
@@ -9,14 +9,12 @@
  *       add
  */
 
-import csharp
+import java
 
-from MethodCall call, Method add
+from MethodAccess call, Method add
 where
-  call.getTarget() = add.getAnUltimateImplementor*() and
-  add.hasName("Add") and
-  add.getDeclaringType()
-      .getUnboundDeclaration()
-      .hasQualifiedName("System.Collections.Generic.ICollection<>") and
+  call.getMethod().overrides*(add) and
+  add.hasName("add") and
+  add.getDeclaringType().getSourceDeclaration().hasQualifiedName("java.util", "Collection") and
   call.getAnArgument() instanceof NullLiteral
 select call

@@ -1,5 +1,5 @@
-name: codeql-csharp
+name: codeql-java
 version: 0.0.0
-dbscheme: semmlecode.csharp.dbscheme
+dbscheme: config/semmlecode.dbscheme
 suites: codeql-suites
-extractor: csharp
+extractor: java

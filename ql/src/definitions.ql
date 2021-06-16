@@ -3,11 +3,11 @@
  * @description Generates use-definition pairs that provide the data
  *              for jump-to-definition in the code viewer.
  * @kind definitions
- * @id cs/jump-to-definition
+ * @id java/jump-to-definition
  */
 
 import definitions
 
-from Use use, Declaration def, string kind
-where def = definitionOf(use, kind)
-select use, def, kind
+from Element e, Element def, string kind
+where def = definitionOf(e, kind)
+select e, def, kind

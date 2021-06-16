@@ -1,13 +1,13 @@
 /**
- * @id cs/examples/integer-literal
+ * @id java/examples/integer-literal
  * @name Integer literal
- * @description Finds places where we use the integer literal '0'.
+ * @description Finds places where we use the integer literal `0`
  * @tags integer
  *       literal
  */
 
-import csharp
+import java
 
 from IntegerLiteral literal
-where literal.getValue().toInt() = 0
+where literal.getIntValue() = 0
 select literal

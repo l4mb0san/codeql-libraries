@@ -1,24 +1,16 @@
 /**
- * @name Number of callables
- * @description Types with a large number of methods might have too many responsibilities.
+ * @name Number of methods
+ * @description The number of methods and constructors in a reference type.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType reftype
  * @metricAggregate avg sum max
+ * @id java/functions-per-type
  * @tags maintainability
- * @id cs/functions-per-type
  */
 
-import csharp
+import java
 
-from ValueOrRefType t, int n
-where
-  t.isSourceDeclaration() and
-  n =
-    count(Callable c | c.getDeclaringType() = t and not c instanceof Accessor) +
-      count(Accessor a |
-        a.getDeclaringType() = t and
-        not a.getDeclaration().(Property).isAutoImplemented() and
-        not a.getDeclaration().(Event).isFieldLike()
-      )
-select t, n order by n desc
+from RefType t
+where t.fromSource()
+select t, t.getMetrics().getNumberOfCallables() as n order by n desc

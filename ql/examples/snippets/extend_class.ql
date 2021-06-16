@@ -1,7 +1,7 @@
 /**
- * @id cs/examples/extend-class
+ * @id java/examples/extend-class
  * @name Class extends/implements
- * @description Finds classes/interfaces that extend/implement 'System.Collections.IEnumerator'.
+ * @description Finds classes/interfaces that extend/implement com.example.Class
  * @tags class
  *       extends
  *       implements
@@ -10,8 +10,8 @@
  *       supertype
  */
 
-import csharp
+import java
 
 from RefType type
-where type.getABaseType+().hasQualifiedName("System.Collections.IEnumerator")
+where type.getASupertype+().hasQualifiedName("com.example", "Class")
 select type

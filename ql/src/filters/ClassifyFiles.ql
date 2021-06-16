@@ -2,22 +2,22 @@
  * @name Classify files
  * @description This query produces a list of all files in a snapshot
  *              that are classified as generated code or test code.
- *
- *              Used by LGTM.
  * @kind file-classifier
- * @id cs/file-classifier
+ * @id java/file-classifier
  */
 
-import csharp
-import semmle.code.csharp.commons.GeneratedCode
-import semmle.code.csharp.frameworks.Test
+import java
 
-predicate classify(File f, string category) {
-  f instanceof GeneratedCodeFile and category = "generated"
+predicate classify(File f, string tag) {
+  f instanceof GeneratedFile and tag = "generated"
   or
-  f instanceof TestFile and category = "test"
+  exists(GeneratedClass gc | gc.getFile() = f | tag = "generated")
+  or
+  exists(TestClass tc | tc.getFile() = f | tag = "test")
+  or
+  exists(TestMethod tm | tm.getFile() = f | tag = "test")
 }
 
-from File f, string category
-where classify(f, category)
-select f, category
+from File f, string tag
+where classify(f, tag)
+select f, tag

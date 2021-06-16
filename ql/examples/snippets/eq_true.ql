@@ -1,14 +1,14 @@
 /**
- * @id cs/examples/eq-true
- * @name Equality test on Boolean
- * @description Finds tests like 'x==true', 'x==false', 'x!=true', '!=false'.
+ * @id java/examples/eq-true
+ * @name Equality test on boolean
+ * @description Finds tests like `==true`, `==false`, `!=true`, `!=false`
  * @tags equals
  *       test
  *       boolean
  */
 
-import csharp
+import java
 
-from EqualityOperation eq
-where eq.getAnOperand() instanceof BoolLiteral
+from EqualityTest eq
+where eq.getAnOperand() instanceof BooleanLiteral
 select eq

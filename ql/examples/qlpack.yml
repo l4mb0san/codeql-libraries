@@ -1,3 +1,3 @@
-name: codeql-csharp-examples
+name: codeql-java-examples
 version: 0.0.0
-libraryPathDependencies: codeql-csharp
+libraryPathDependencies: codeql-java

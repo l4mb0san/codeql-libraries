@@ -1,16 +1,17 @@
 /**
  * @name Lines of comments in files
- * @description Files with few lines of comment might not have sufficient documentation to make them understandable.
+ * @description The number of lines of comment in a file.
  * @kind treemap
  * @treemap.warnOn lowValues
  * @metricType file
  * @metricAggregate avg sum max
- * @id cs/lines-of-comments-in-files
+ * @id java/lines-of-comments-in-files
  * @tags maintainability
  *       documentation
  */
 
-import csharp
+import java
 
-from SourceFile f
-select f, f.getNumberOfLinesOfComments() as n order by n desc
+from File f, int n
+where n = f.getNumberOfCommentLines()
+select f, n order by n desc

@@ -1,4 +1,4 @@
-| complexity.cs:3:10:3:12 | cc1 | 1 |
-| complexity.cs:29:10:29:12 | cc2 | 2 |
-| complexity.cs:40:10:40:12 | cc3 | 3 |
-| complexity.cs:52:10:52:12 | cc4 | 4 |
+| Complexity.java:3:7:3:9 | cc1 | 1 |
+| Complexity.java:25:7:25:9 | cc2 | 2 |
+| Complexity.java:35:7:35:9 | cc3 | 3 |
+| Complexity.java:46:7:46:9 | cc4 | 4 |

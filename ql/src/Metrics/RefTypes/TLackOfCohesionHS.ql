@@ -1,16 +1,16 @@
 /**
- * @name Lack of cohesion (HS)
- * @description Types that lack cohesion (as defined by Henderson-Sellers) often have too many responsibilities.
+ * @name Lack of type cohesion (HS)
+ * @description Lack of cohesion for a type as defined by Henderson-Sellers.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType reftype
  * @metricAggregate avg max
+ * @id java/lack-of-cohesion-hs
  * @tags modularity
- * @id cs/lack-of-cohesion-hs
  */
 
-import csharp
+import java
 
-from ValueOrRefType t
-where t.isSourceDeclaration()
-select t, t.getLackOfCohesionHS() as n order by n desc
+from RefType t
+where t.fromSource()
+select t, t.getMetrics().getLackOfCohesionHS() as n order by n desc

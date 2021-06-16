@@ -3,19 +3,36 @@
   "qhelp.dtd">
 <qhelp>
 <overview>
-<p>This metric measures the number of lines of code each method has. If methods have too many lines 
-they may be difficult to understand and hence a source of defects. It is also an indication that 
-methods may be trying to do too much.</p>
+<p>
+A method that contains a high number of lines of code has a number of problems:</p>
+
+<ul>
+<li>It can be difficult to understand, difficult to check, and a common source of defects 
+(particularly towards the end of the method, because few people read that far).</li>
+<li>It is likely to lack cohesion because it has too many responsibilities.</li>
+<li>It increases the risk of introducing new defects during routine code changes.</li>
+</ul>
 
 </overview>
 <recommendation>
-<p>Extract logical parts of long methods into auxiliary methods. As a guideline, each method should 
-be able to be read on screen without scrolling.</p>
+
+<p>
+Break up long methods into smaller methods by extracting
+parts of their functionality into simpler methods, for example by using the 'Extract
+Method' refactoring from [Fowler]. As an approximate guide, a method should fit on one screen or 
+side of Letter/A4 paper. 
+</p>
+
+
 
 </recommendation>
 <references>
 
-  <li>Martin Fowler. <em>Refactoring</em>. Addison-Wesley. 1999.</li>
+
+<li>
+M. Fowler, <em>Refactoring</em>, pp. 89-95. Addison-Wesley, 1999.
+</li>
+
 
 </references>
 </qhelp>

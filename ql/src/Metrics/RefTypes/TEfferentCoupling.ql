@@ -1,18 +1,18 @@
 /**
- * @name Outgoing dependencies
- * @description A large number of outgoing type dependencies make a type brittle.
+ * @name Outgoing type dependencies
+ * @description The number of types on which a class depends.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType reftype
  * @metricAggregate avg max
+ * @id java/outgoing-type-dependencies
  * @tags testability
  *       modularity
  *       maintainability
- * @id cs/outgoing-type-dependencies
  */
 
-import csharp
+import java
 
-from ValueOrRefType t
-where t.isSourceDeclaration()
-select t, t.getEfferentCoupling() as n order by n desc
+from RefType t
+where t.fromSource()
+select t, t.getMetrics().getEfferentCoupling() as n order by n desc

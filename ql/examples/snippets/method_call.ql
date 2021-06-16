@@ -1,16 +1,16 @@
 /**
- * @id cs/examples/method-call
+ * @id java/examples/method-call
  * @name Call to method
- * @description Finds calls to method 'Company.Class.MethodName'.
+ * @description Finds calls to com.example.Class.methodName
  * @tags call
  *       method
  */
 
-import csharp
+import java
 
-from MethodCall call, Method method
+from MethodAccess call, Method method
 where
-  call.getTarget() = method and
-  method.hasName("MethodName") and
-  method.getDeclaringType().hasQualifiedName("Company.Class")
+  call.getMethod() = method and
+  method.hasName("methodName") and
+  method.getDeclaringType().hasQualifiedName("com.example", "Class")
 select call

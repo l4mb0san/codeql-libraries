@@ -3,33 +3,78 @@
   "qhelp.dtd">
 <qhelp>
 <overview>
-<p>This metric calculates the number of incoming dependencies of a type (the number of other types 
-that depend on it).</p>
+<p>
+This metric measures the number of incoming dependencies for each reference
+type, i.e. the number of other types that depend on it.
+</p>
 
-<p>Types that have a large number of incoming type dependencies are very hard to change because any 
-changes may require changes to their dependents. This is not necessarily a problem and it is 
-expected that some types will have a lot of incoming dependencies in most projects. Types with a 
-high number of incoming and outgoing dependencies are problematic because they are both hard to 
-change and have a lot of reasons to need to change.</p>
+<p>
+Types that are depended upon by many other types typically require a lot of
+effort to change, because changing them will force their dependents to change
+as well. This is not necessarily a bad thing -- indeed, most systems will have
+some such types (one example might be a string class). However, types with a high number
+of incoming dependencies 
+and a high number of outgoing dependencies are hard to maintain. A type with both high afferent
+coupling <em>and</em> high efferent coupling is referred to as a hub type.
+Such types can be problematic, because on the one hand they are hard to
+change (high afferent coupling), yet on the other they have many reasons to
+change (high efferent coupling). This contradiction yields code that is very
+hard to maintain or test.
+</p>
 
-<p>Types with very few incoming type dependencies (especially lower level types) might not be doing 
-very much. Types with no incoming dependencies at all (and no static entry points) are dead code.</p>
+<p>
+Conversely, some types may only be depended on by very few other types. Again,
+this is not necessarily a problem -- we would expect, for example, that the
+top-level types of a system would meet this criterion. When lower-level
+types have very few incoming dependencies, however, it can be an indication
+that a type is not pulling its weight. In extreme cases, types may even
+have an afferent coupling of <code>0</code>, indicating that they are dead
+code.
+</p> 
 
 </overview>
 <recommendation>
-<p>This metric alone should not be used to decide whether a type needs to be refactored. Types with 
-a large number of incoming and outgoing type dependencies should be considered for refactoring. 
-Generally this means splitting up the type into multiple other types.</p>
 
-<p>Types with very few incoming dependencies that are not at the top level of the program might not 
-be pulling their weight and should possibly have their functionality merged with other classes.</p>
+<p>
+It is unwise to refactor a type based purely on its high or low number of
+incoming dependencies -- a type's afferent coupling value only makes sense
+in the context of its role in the system as a whole. However, when combined
+with other metrics such as efferent coupling, it is possible to make some
+general recommendations:
+</p>
 
-<p>Types with no incoming dependencies may be dead code that can be removed.</p>
+<ul>
+<li>
+Types with high numbers of incoming <em>and</em> outgoing dependencies
+are hub types that are prime candidates for refactoring (although this
+will not always be easy). The general strategy is to split the type into
+smaller types that each have fewer responsibilities, and refactor the code
+that previously used the hub type accordingly.
+</li>
+
+<li>
+Types that have very few incoming dependencies and are not at the top level
+of a system may not be pulling their weight and should be refactored, e.g.
+using the 'Collapse Hierarchy' or 'Inline Class' techniques in [Fowler]
+(see the section entitled 'Lazy Class' on p.68).
+</li>
+
+<li>
+Types that have an afferent coupling of <code>0</code> may be dead code --
+in this situation, they can often be deleted.
+</li>
+</ul>
+
+
 
 </recommendation>
 <references>
 
-  <li>Robert Cecil Martin. <em>Agile Software Development: Principles, Patterns and Practices</em>. Pearson Education. 2002.</li>
+
+<li>
+M. Fowler. <em>Refactoring</em>. Addison-Wesley, 1999.
+</li>
+
 
 </references>
 </qhelp>

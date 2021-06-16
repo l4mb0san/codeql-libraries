@@ -5,34 +5,49 @@
 
 <overview>
 <p>
-If the contents of a collection are never used, then it is useless and therefore unnecessary.
-This adds performance overhead, obscures the code, and may indicate an error in the logic.
+If the contents of a collection or map are never accessed in any way, then it is useless and
+the code that updates it is effectively dead code. Often, such objects are left over from
+an incomplete refactoring, or they indicate an underlying logic error.
 </p>
 
 </overview>
 <recommendation>
 
 <p>
-Either remove the collection if it is no longer needed, or ensure that it is used as intended.
+Either remove the collection/map if it is genuinely unnecessary, or ensure that its
+elements are accessed.
 </p>
 
 </recommendation>
 <example>
 
 <p>
-In this example, the property <code>Names</code> returns the wrong collection 
-(<code>genres</code>). This logic error means that the <code>names</code> collection 
-is populated but never accessed.
+In the following example code, the <code>reachable</code> method determines whether a node in
+a tree is reachable from <code>ROOT</code>. It maintains a set <code>reachableNodes</code>,
+which contains all nodes that have previously been found to be reachable. Most likely, this set
+is meant to act as a cache to avoid spurious recomputation, but as it stands the code never checks
+whether any node is contained in the set.
 </p> 
 
-<sample src="WriteOnlyContainer.cs" />
+<sample src="WriteOnlyContainer.java" />
 
 <p>
-The code is fixed by returning the correct field for <code>Names</code>.
+In the following modification of the above example, <code>reachable</code> checks the cache
+to see whether the node has already been considered.
 </p>
 
-<sample src="WriteOnlyContainerFix.cs" />
-
+<sample src="WriteOnlyContainerGood.java" />
 
 </example>
+<references>
+
+
+<li>
+  Java API Specification:
+  <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html">Collection</a>,
+  <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html">Map</a>.
+</li>
+
+
+</references>
 </qhelp>

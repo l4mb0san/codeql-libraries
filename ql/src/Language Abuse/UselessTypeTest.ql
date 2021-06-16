@@ -1,27 +1,22 @@
 /**
  * @name Useless type test
- * @description There is no need to test whether or not an instance of a derived type is also an instance of a base type - it always is.
+ * @description Testing whether a derived type is an instance of its base type is unnecessary.
  * @kind problem
  * @problem.severity warning
- * @precision medium
- * @id cs/useless-type-test
+ * @precision very-high
+ * @id java/useless-type-test
  * @tags maintainability
  *       language-features
  *       external/cwe/cwe-561
  */
 
-import csharp
+import java
 
-pragma[noinline]
-private predicate isTypePattern(IsExpr ie, ValueOrRefType t, ValueOrRefType ct) {
-  t = ie.getExpr().getType() and
-  ct = ie.getPattern().(TypePatternExpr).getCheckedType()
-}
-
-from IsExpr ie, ValueOrRefType t, ValueOrRefType ct
+from InstanceOfExpr ioe, RefType t, RefType ct
 where
-  isTypePattern(ie, t, ct) and
-  ct = t.getABaseType+()
-select ie,
+  t = ioe.getExpr().getType() and
+  ct = ioe.getTypeName().getType() and
+  ct = t.getASupertype+()
+select ioe,
   "There is no need to test whether an instance of $@ is also an instance of $@ - it always is.", t,
   t.getName(), ct, ct.getName()

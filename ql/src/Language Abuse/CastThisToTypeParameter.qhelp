@@ -3,26 +3,27 @@
   "qhelp.dtd">
 <qhelp>
 <overview>
-<p>Casting <code>this</code> to a type parameter may indicate an implicit type constraint. That is, 
-the programmer wanted to express that <code>this</code> can be converted to the type parameter but 
-could not find an appropriate way to do so. Instead, they rely on derived type to implement the 
-correct interface.</p>
+<p>
+Casting <code>this</code> to a type parameter usually suggests that there is an implicit type constraint - the programmer probably wanted to express
+the notion that <code>this</code> could be converted to the type parameter (when using the enclosing method from derived types). 
+However, casting to the desired type, relies on derived types to ensure that the cast will succeed without the compiler forcing them
+to do so.
+</p>
 
 </overview>
 <recommendation>
-<p>The solution is to enforce the constraint using the mechanism of an abstract property on the base 
-type. Each derived type must then implement this property, which makes the constraint checkable by 
-the compiler and removes the need for a cast.</p>
+
+<p>
+The solution is to enforce the constraint by adding an abstract method on the base type (see example below). Each derived
+type must then implement this method, which makes the constraint checkable by the compiler and removes the need for a cast.
+</p>
 
 </recommendation>
 <example>
-<p>In this example the programmer is relying on any concrete implementations of <code>BaseNode
-</code> to follow the correct design pattern. <code>Derived1</code> does but <code>Derived2</code> 
-does not. The program will still compile but will crash if an attempt is made to access the <code>
-Root</code> property of an instance of <code>Derived2</code>.</p>
-<sample src="CastThisToTypeParameter.cs" />
-
-<p>It would be better to enforce this using an abstract property.</p>
-<sample src="CastThisToTypeParameterFix.cs" />
+<p>In this example <code>BadBaseNode</code> relies on derived types to use the right pattern.</p>
+<sample src="CastThisToTypeParameter.java" />
+<p>This constraint is better enforced by adding an abstract method on the base type. Implementing 
+this method makes the constraint checkable by the compiler.</p>
+<sample src="CastThisToTypeParameterFix.java" />
 </example>
 </qhelp>

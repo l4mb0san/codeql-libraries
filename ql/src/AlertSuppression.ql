@@ -2,21 +2,25 @@
  * @name Alert suppression
  * @description Generates information about alert suppressions.
  * @kind alert-suppression
- * @id cs/alert-suppression
+ * @id java/alert-suppression
  */
 
-import csharp
+import java
 
 /**
  * An alert suppression comment.
  */
-class SuppressionComment extends CommentLine {
+class SuppressionComment extends Javadoc {
   string annotation;
 
   SuppressionComment() {
-    // Must be either `// ...` or `/* ... */` on a single line.
-    this.getRawText().regexpMatch("//.*|/\\*.*\\*/") and
-    exists(string text | text = this.getText() |
+    // suppression comments must be single-line
+    (
+      isEolComment(this)
+      or
+      isNormalComment(this) and exists(int line | hasLocationInfo(_, line, _, line, _))
+    ) and
+    exists(string text | text = getChild(0).getText() |
       // match `lgtm[...]` anywhere in the comment
       annotation = text.regexpFind("(?i)\\blgtm\\s*\\[[^\\]]*\\]", _, _)
       or
@@ -24,6 +28,11 @@ class SuppressionComment extends CommentLine {
       annotation = text.regexpFind("(?i)(?<=^|;)\\s*lgtm(?!\\B|\\s*\\[)", _, _).trim()
     )
   }
+
+  /**
+   * Gets the text of this suppression comment.
+   */
+  string getText() { result = getChild(0).getText() }
 
   /** Gets the suppression annotation in this comment. */
   string getAnnotation() { result = annotation }
@@ -44,7 +53,7 @@ class SuppressionComment extends CommentLine {
 /**
  * The scope of an alert suppression comment.
  */
-class SuppressionScope extends @commentline {
+class SuppressionScope extends @javadoc {
   SuppressionScope() { this instanceof SuppressionComment }
 
   /** Gets a suppression comment with this scope. */

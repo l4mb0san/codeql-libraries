@@ -3,195 +3,203 @@
  * in the code viewer.
  */
 
-import csharp
+import java
 import IDEContextual
 
-/** An element with an associated definition. */
-abstract class Use extends @type_mention_parent {
-  /**
-   * Holds if this element is at the specified location.
-   * The location spans column `startcolumn` of line `startline` to
-   * column `endcolumn` of line `endline` in file `filepath`.
-   * For more information, see
-   * [Locations](https://help.semmle.com/QL/learn-ql/ql/locations.html).
-   */
-  predicate hasLocationInfo(
-    string filepath, int startline, int startcolumn, int endline, int endcolumn
-  ) {
-    exists(Location l |
-      l = this.(Element).getLocation() or
-      l = this.(TypeMention).getLocation()
-    |
-      filepath = l.getFile().getAbsolutePath() and
-      startline = l.getStartLine() and
-      startcolumn = l.getStartColumn() and
-      endline = l.getEndLine() and
-      endcolumn = l.getEndColumn()
-    )
-  }
-
-  /** Gets the definition associated with this element. */
-  abstract Declaration getDefinition();
-
-  /**
-   * Gets the type of use.
-   *
-   * - `"M"`: call.
-   * - `"V"`: variable use.
-   * - `"T"`: type reference.
-   */
-  abstract string getUseType();
-
-  /** Gets a textual representation of this element. */
-  abstract string toString();
-}
-
-/** A method call/access. */
-private class MethodUse extends Use, QualifiableExpr {
-  MethodUse() {
-    this instanceof MethodCall or
-    this instanceof MethodAccess
-  }
-
-  /** Gets the qualifier of this method use, if any. */
-  private Expr getFormatQualifier() {
-    (
-      if this.getQualifiedDeclaration().(Method).isExtensionMethod()
-      then result = this.(MethodCall).getArgument(0)
-      else result = this.getQualifier()
-    ) and
-    not result.isImplicit()
-  }
-
-  override predicate hasLocationInfo(
-    string filepath, int startline, int startcolumn, int endline, int endcolumn
-  ) {
-    Use.super.hasLocationInfo(filepath, _, _, _, _) and
-    endline = startline and
-    endcolumn = startcolumn + this.getQualifiedDeclaration().getName().length() - 1 and
-    (
-      exists(Location ql | ql = this.getFormatQualifier().getLocation() |
-        startline = ql.getEndLine() and
-        startcolumn = ql.getEndColumn() + 2
+/**
+ * Restricts the location of a method access to the method identifier only,
+ * excluding its qualifier, type arguments and arguments.
+ *
+ * If there is any whitespace between the method identifier and its first argument,
+ * or between the method identifier and its qualifier (or last type argument, if any),
+ * the location may be slightly inaccurate and include such whitespace,
+ * but it should suffice for the purpose of avoiding overlapping definitions.
+ */
+private class LocationOverridingMethodAccess extends MethodAccess {
+  override predicate hasLocationInfo(string path, int sl, int sc, int el, int ec) {
+    exists(MemberRefExpr e | e.getReferencedCallable() = getMethod() |
+      exists(int elRef, int ecRef | e.hasLocationInfo(path, _, _, elRef, ecRef) |
+        sl = elRef and
+        sc = ecRef - getMethod().getName().length() + 1 and
+        el = elRef and
+        ec = ecRef
       )
-      or
-      not exists(this.getFormatQualifier()) and
-      exists(Location l | l = this.getLocation() |
-        startline = l.getStartLine() and
-        startcolumn = l.getStartColumn()
+    )
+    or
+    not exists(MemberRefExpr e | e.getReferencedCallable() = getMethod()) and
+    exists(int slSuper, int scSuper, int elSuper, int ecSuper |
+      super.hasLocationInfo(path, slSuper, scSuper, elSuper, ecSuper)
+    |
+      (
+        if exists(getTypeArgument(_))
+        then
+          exists(Location locTypeArg |
+            locTypeArg = getTypeArgument(count(getTypeArgument(_)) - 1).getLocation()
+          |
+            sl = locTypeArg.getEndLine() and
+            sc = locTypeArg.getEndColumn() + 2
+          )
+        else (
+          if exists(getQualifier())
+          then
+            // Note: this needs to be the original (full) location of the qualifier, not the modified one.
+            exists(Location locQual | locQual = getQualifier().getLocation() |
+              sl = locQual.getEndLine() and
+              sc = locQual.getEndColumn() + 2
+            )
+          else (
+            sl = slSuper and
+            sc = scSuper
+          )
+        )
+      ) and
+      (
+        if getNumArgument() > 0
+        then
+          // Note: this needs to be the original (full) location of the first argument, not the modified one.
+          exists(Location locArg | locArg = getArgument(0).getLocation() |
+            el = locArg.getStartLine() and
+            ec = locArg.getStartColumn() - 2
+          )
+        else (
+          el = elSuper and
+          ec = ecSuper - 2
+        )
       )
     )
   }
-
-  override Method getDefinition() { result = getQualifiedDeclaration().getUnboundDeclaration() }
-
-  override string getUseType() { result = "M" }
-
-  override string toString() { result = this.(Expr).toString() }
 }
 
-/** An access. */
-private class AccessUse extends Access, Use {
-  AccessUse() {
-    not this.getTarget().(Parameter).getCallable() instanceof Accessor and
-    not this = any(LocalVariableDeclAndInitExpr d).getLValue() and
-    not this.isImplicit() and
-    not this instanceof MethodAccess and // handled by `MethodUse`
-    not this instanceof TypeAccess and // handled by `TypeMentionUse`
-    not this.(FieldAccess).getParent() instanceof Field and // Enum initializer
-    not this.(FieldAccess).getParent().getParent() instanceof Field and // Field initializer
-    not this.(PropertyAccess).getParent().getParent() instanceof Property // Property initializer
-  }
-
-  /** Gets the qualifier of this acccess, if any. */
-  private Expr getFormatQualifier() {
-    result = this.(QualifiableExpr).getQualifier() and
-    not result.isImplicit()
-  }
-
-  override predicate hasLocationInfo(
-    string filepath, int startline, int startcolumn, int endline, int endcolumn
-  ) {
-    exists(Location ql | ql = this.getFormatQualifier().getLocation() |
-      startline = ql.getEndLine() and
-      startcolumn = ql.getEndColumn() + 2 and
-      Use.super.hasLocationInfo(filepath, _, _, endline, endcolumn)
-    )
-    or
-    not exists(this.getFormatQualifier()) and
-    Use.super.hasLocationInfo(filepath, startline, startcolumn, endline, endcolumn)
-  }
-
-  override Declaration getDefinition() { result = this.getTarget().getUnboundDeclaration() }
-
-  override string getUseType() {
-    if this instanceof Call or this instanceof LocalFunctionAccess
-    then result = "M"
-    else
-      if this instanceof BaseAccess or this instanceof ThisAccess
-      then result = "T"
-      else result = "V"
-  }
-
-  override string toString() { result = this.(Access).toString() }
-}
-
-/** A type mention. */
-private class TypeMentionUse extends Use, TypeMention {
-  TypeMentionUse() {
-    // In type mentions such as `T[]`, `T?`, `T*`, and `(S, T)`, we only want
-    // uses for the nested type mentions
-    forall(TypeMention child, Type t |
-      child.getParent() = this and
-      t = this.getType()
+/**
+ * Restricts the location of a type access to exclude
+ * the type arguments and qualifier, if any.
+ */
+private class LocationOverridingTypeAccess extends TypeAccess {
+  override predicate hasLocationInfo(string path, int sl, int sc, int el, int ec) {
+    exists(int slSuper, int scSuper, int elSuper, int ecSuper |
+      super.hasLocationInfo(path, slSuper, scSuper, elSuper, ecSuper)
     |
-      not t instanceof ArrayType and
-      not t instanceof NullableType and
-      not t instanceof PointerType and
-      not t instanceof TupleType
+      (
+        if exists(getQualifier())
+        then
+          // Note: this needs to be the original (full) location of the qualifier, not the modified one.
+          exists(Location locQual | locQual = getQualifier().getLocation() |
+            sl = locQual.getEndLine() and
+            sc = locQual.getEndColumn() + 2
+          )
+        else (
+          sl = slSuper and
+          sc = scSuper
+        )
+      ) and
+      (
+        if exists(getTypeArgument(_))
+        then
+          // Note: this needs to be the original (full) location of the first type argument, not the modified one.
+          exists(Location locArg | locArg = getTypeArgument(0).getLocation() |
+            el = locArg.getStartLine() and
+            ec = locArg.getStartColumn() - 2
+          )
+        else (
+          el = elSuper and
+          ec = ecSuper
+        )
+      )
     )
   }
+}
 
-  override predicate hasLocationInfo(
-    string filepath, int startline, int startcolumn, int endline, int endcolumn
-  ) {
-    Use.super.hasLocationInfo(filepath, startline, startcolumn, endline, _) and
-    endcolumn =
-      startcolumn +
-          this.getType().(ConstructedType).getUnboundGeneric().getNameWithoutBrackets().length() - 1
-    or
-    Use.super.hasLocationInfo(filepath, startline, startcolumn, endline, _) and
-    endcolumn =
-      startcolumn + this.getType().(UnboundGenericType).getNameWithoutBrackets().length() - 1
-    or
-    not this.getType() instanceof ConstructedType and
-    not this.getType() instanceof UnboundGenericType and
-    Use.super.hasLocationInfo(filepath, startline, startcolumn, endline, endcolumn)
+/**
+ * Restricts the location of a field access to the name of the accessed field only,
+ * excluding its qualifier.
+ */
+private class LocationOverridingFieldAccess extends FieldAccess {
+  override predicate hasLocationInfo(string path, int sl, int sc, int el, int ec) {
+    super.hasLocationInfo(path, _, _, el, ec) and
+    sl = el and
+    sc = ec - getField().getName().length() + 1
   }
+}
 
-  override Type getDefinition() { result = this.getType().getUnboundDeclaration() }
-
-  override string getUseType() {
-    if this.getTarget() instanceof ObjectCreation
-    then result = "M" // constructor call
-    else result = "T"
+/**
+ * Restricts the location of a single-type-import declaration to the name of the imported type only,
+ * excluding the `import` keyword and the package name.
+ */
+private class LocationOverridingImportType extends ImportType {
+  override predicate hasLocationInfo(string path, int sl, int sc, int el, int ec) {
+    exists(int slSuper, int scSuper, int elSuper, int ecSuper |
+      super.hasLocationInfo(path, slSuper, scSuper, elSuper, ecSuper)
+    |
+      el = elSuper and
+      ec = ecSuper - 1 and
+      sl = el and
+      sc = ecSuper - getImportedType().getName().length()
+    )
   }
+}
 
-  override string toString() { result = TypeMention.super.toString() }
+/**
+ * Restricts the location of a single-static-import declaration to the name of the imported member(s) only,
+ * excluding the `import` keyword and the package name.
+ */
+private class LocationOverridingImportStaticTypeMember extends ImportStaticTypeMember {
+  override predicate hasLocationInfo(string path, int sl, int sc, int el, int ec) {
+    exists(int slSuper, int scSuper, int elSuper, int ecSuper |
+      super.hasLocationInfo(path, slSuper, scSuper, elSuper, ecSuper)
+    |
+      el = elSuper and
+      ec = ecSuper - 1 and
+      sl = el and
+      sc = ecSuper - getName().length()
+    )
+  }
+}
+
+private Element definition(Element e, string kind) {
+  e.(MethodAccess).getMethod().getSourceDeclaration() = result and
+  kind = "M" and
+  not result instanceof InitializerMethod
+  or
+  e.(TypeAccess).getType().(RefType).getSourceDeclaration() = result and kind = "T"
+  or
+  exists(Variable v | v = e.(VarAccess).getVariable() |
+    result = v.(Field).getSourceDeclaration() or
+    result = v.(Parameter).getSourceDeclaration() or
+    result = v.(LocalVariableDecl)
+  ) and
+  kind = "V"
+  or
+  e.(ImportType).getImportedType() = result and kind = "I"
+  or
+  e.(ImportStaticTypeMember).getAMemberImport() = result and kind = "I"
+}
+
+private predicate dummyVarAccess(VarAccess va) {
+  exists(AssignExpr ae, InitializerMethod im |
+    ae.getDest() = va and
+    ae.getParent() = im.getBody().getAChild()
+  )
+}
+
+private predicate dummyTypeAccess(TypeAccess ta) {
+  exists(FunctionalExpr e |
+    e.getAnonymousClass().getClassInstanceExpr().getTypeName() = ta.getParent*()
+  )
 }
 
 /**
  * Gets an element, of kind `kind`, that element `e` uses, if any.
+ *
+ * The `kind` is a string representing what kind of use it is:
+ *  - `"M"` for function and method calls
+ *  - `"T"` for uses of types
+ *  - `"V"` for variable accesses
+ *  - `"I"` for import directives
  */
-cached
-Declaration definitionOf(Use use, string kind) {
-  result = use.getDefinition() and
+Element definitionOf(Element e, string kind) {
+  result = definition(e, kind) and
   result.fromSource() and
-  kind = use.getUseType() and
-  // Some entities have many locations. This can arise for files that
-  // are duplicated multiple times in the database at different
-  // locations. Rather than letting the result set explode, we just
-  // exclude results that are "too ambiguous" -- we could also arbitrarily
-  // pick one location later on.
-  strictcount(result.getLocation()) < 10
+  e.fromSource() and
+  not dummyVarAccess(e) and
+  not dummyTypeAccess(e)
 }

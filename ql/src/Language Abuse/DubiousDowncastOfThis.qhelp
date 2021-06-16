@@ -3,29 +3,27 @@
   "qhelp.dtd">
 <qhelp>
 <overview>
-<p>If a type <code>Derived</code> inherits (either directly or indirectly) from a type <code>Base
-</code>, then it has a dependency on <code>Base</code> by virtue of this inheritance relationship - 
-that is, it cannot be used without <code>Base</code> also being present. If, in addition to making 
-<code>Derived</code> inherit from <code>Base</code>, you also write code that depends on <code>
-Derived</code> within <code>Base</code>, you cause <code>Base</code> to depend on <code>Derived
-</code> as well, resulting in a dependency cycle between the two types. Dependency cycles are a 
-well-known design smell, in that they make code both difficult to read and difficult to test.</p>
+<p>
+Downcasting <code>this</code> to a derived type creates a dependency cycle. Derived types already depend 
+on their parent type and the cast creates a dependency in the other direction.
+</p>
 
-<p>In the situation just described, the dependency cycle has been introduced by writing code that 
-coerces the type of <code>this</code> to a derived type. This is a very unwise thing to do - a type 
-should never know about its specific descendants, even though it may of course choose to impose some 
-constraints on them as a group (such as the need for every derived type to implement a method with a 
-specific signature).</p>
+<p>Dependency cycles should be avoided as they make code both difficult to read and difficult to test. 
+In addition, a type should not know about its specific descendants, even though it may impose some
+constraints on them as a group (for example, abstract classes may require every derived type to implement 
+a method with a specific signature).</p>
 
 </overview>
 <recommendation>
-<p>The appropriate solution to this problem is to redesign the base and derived types so that there 
-is no longer a need for the base type to depend on the types that derive from it.</p>
+<p>
+The base and derived types should be redesigned so that there is no need for the base type to depend 
+on the types deriving from it.</p>
 
 </recommendation>
 <example>
-<p>In this example <code>BaseClass</code> attempts to downcast itself to various known subclasses 
-in order to call methods specific to those subclasses. This is very bad practice.</p> 
-<sample src="DubiousDowncastOfThis.cs" />
+<p>In this example, <code>BadBase</code> introduces a dependency cycle with <code>Derived</code> by 
+coercing the type of <code>this</code> to a derived type. </p>
+
+<sample src="DubiousDowncastOfThis.java" />
 </example>
 </qhelp>

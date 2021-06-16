@@ -1,21 +1,22 @@
 /**
- * @name Nesting depth
- * @description The maximum number of nested statements (eg. if, for, while ...). Blocks are not counted.
+ * @name Statement nesting depth
+ * @description The maximum level of nesting of statements (for example 'if', 'for', 'while') in a
+ *              method. Blocks are not counted.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType callable
  * @metricAggregate avg max
+ * @id java/statement-nesting-depth-per-function
  * @tags maintainability
  *       complexity
- * @id cs/statement-nesting-depth-per-function
  */
 
-import csharp
+import java
 
 /**
  * The parent of a statement, excluding some common cases that don't really make
- * sense for nesting depth. An example is: "if (...) { } else if (...) { }: we don't
- * consider the second if nested. Blocks are also skipped
+ * sense for nesting depth. For example, in `if (...) { } else if (...) { }` we don't
+ * consider the second `if` nested. Blocks are also skipped.
  */
 predicate realParent(Stmt inner, Stmt outer) {
   if skipParent(inner) then realParent(inner.getParent(), outer) else outer = inner.getParent()

@@ -1,16 +1,16 @@
 /**
  * @name Number of interfaces
- * @description Files with more than one interface might cause problems when changed because the interfaces are poorly compartmentalized.
+ * @description The number of interfaces in a compilation unit.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType file
  * @metricAggregate avg sum max
+ * @id java/interfaces-per-file
  * @tags maintainability
- * @id cs/interfaces-per-file
  */
 
-import csharp
+import java
 
-from SourceFile f, int n
-where n = count(Interface i | i.getFile() = f and i.isSourceDeclaration())
+from CompilationUnit f, int n
+where n = count(Interface i | i.fromSource() and i.getCompilationUnit() = f)
 select f, n order by n desc

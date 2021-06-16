@@ -3,33 +3,45 @@
  * @description Querying the contents of a collection or map that is never initialized is not normally useful.
  * @kind problem
  * @problem.severity error
- * @precision high
- * @id cs/empty-collection
+ * @precision very-high
+ * @id java/empty-container
  * @tags reliability
  *       maintainability
  *       useless-code
  *       external/cwe/cwe-561
  */
 
-import csharp
-import semmle.code.csharp.commons.Collections
+import java
+import semmle.code.java.Reflection
+import Containers
 
 from Variable v
 where
   v.fromSource() and
-  v.getType() instanceof CollectionType and
-  // Publics might get assigned elsewhere
-  (v instanceof LocalVariable or v.(Field).isPrivate()) and
-  // All initializers (if any) are empty collections.
-  forall(AssignableDefinition d | v = d.getTarget() |
-    d.getSource() instanceof EmptyCollectionCreation
+  v.getType() instanceof ContainerType and
+  // Exclude parameters and non-private fields.
+  (v instanceof LocalVariableDecl or v.(Field).isPrivate()) and
+  // Exclude fields that may be written to reflectively.
+  not reflectivelyWritten(v) and
+  // Every access to `v` is either...
+  forall(VarAccess va | va = v.getAnAccess() |
+    // ...an assignment storing a fresh container into `v`,
+    exists(AssignExpr assgn | va = assgn.getDest() | assgn.getSource() instanceof FreshContainer)
+    or
+    // ...a return (but only if `v` is a local variable)
+    v instanceof LocalVariableDecl and exists(ReturnStmt ret | ret.getResult() = va)
+    or
+    // ...or a call to a query method on `v`.
+    exists(MethodAccess ma | va = ma.getQualifier() |
+      ma.getMethod() instanceof ContainerQueryMethod
+    )
   ) and
-  // All accesses do not add data.
-  forex(Access a | v.getAnAccess() = a |
-    a instanceof NoAddAccess or a instanceof EmptyInitializationAccess
+  // There is at least one call to a query method.
+  exists(MethodAccess ma | v.getAnAccess() = ma.getQualifier() |
+    ma.getMethod() instanceof ContainerQueryMethod
   ) and
-  // Attributes indicate some kind of reflection
-  not exists(Attribute a | v = a.getTarget()) and
-  // There is at least one non-assignment access
-  v.getAnAccess() instanceof NoAddAccess
+  // Also, any value that `v` is initialized to is a fresh container,
+  forall(Expr e | e = v.getAnAssignedValue() | e instanceof FreshContainer) and
+  // and `v` is not implicitly initialized by a for-each loop.
+  not exists(EnhancedForStmt efs | efs.getVariable().getVariable() = v)
 select v, "The contents of this container are never initialized."

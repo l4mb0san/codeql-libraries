@@ -1,22 +1,18 @@
 /**
- * @name Number of statements
- * @description Types with a large number of statements might be confusing and have too many responsibilities.
+ * @name Number of statements in types
+ * @description The number of statements in the methods and constructors of a type.
  * @kind treemap
  * @treemap.warnOn highValues
  * @metricType reftype
  * @metricAggregate avg sum max
+ * @id java/statements-per-type
  * @tags maintainability
- * @id cs/statements-per-type
  */
 
-import csharp
+import java
 
-from ValueOrRefType t, int n
+from RefType t, int n
 where
-  t.isSourceDeclaration() and
-  n =
-    count(Stmt s |
-      s.getEnclosingCallable().getDeclaringType() = t and
-      s != s.getEnclosingCallable().getAChild()
-    ) // we do not count the top-level block
+  t.fromSource() and
+  n = count(Stmt s | s.getEnclosingCallable() = t.getACallable())
 select t, n order by n desc

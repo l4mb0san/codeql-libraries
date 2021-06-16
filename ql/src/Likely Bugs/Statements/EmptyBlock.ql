@@ -1,45 +1,61 @@
 /**
  * @name Empty branch of conditional, or empty loop body
- * @description Empty blocks that occur as a branch of a conditional or as a loop body may indicate
- *              badly-maintained code or a bug due to an unhandled case.
+ * @description An undocumented empty block or statement hinders readability. It may also
+ *              indicate incomplete code.
  * @kind problem
  * @problem.severity warning
- * @precision high
- * @id cs/empty-block
+ * @precision low
+ * @id java/empty-block
  * @tags reliability
  *       readability
  */
 
-import csharp
+import semmle.code.java.Statement
 
-predicate loopStmtWithEmptyBlock(BlockStmt child) {
-  exists(LoopStmt stmt, SourceLocation l |
-    stmt.getAChild() = child and
-    child.getNumberOfStmts() = 0 and
-    child.getLocation() = l and
-    l.getStartLine() != l.getEndLine()
+/** A block without statements or comments. */
+private BlockStmt emptyBlock() {
+  result.getNumStmt() = 0 and
+  result.getLocation().getNumberOfCommentLines() = 0
+}
+
+/** Auxiliary predicate: file and line of a comment. */
+private predicate commentedLine(File file, int line) {
+  exists(JavadocText text, Location loc |
+    loc = text.getLocation() and
+    loc.getFile() = file and
+    loc.getStartLine() = line and
+    loc.getEndLine() = line
   )
 }
 
-predicate conditionalWithEmptyBlock(BlockStmt child) {
-  exists(IfStmt stmt |
-    stmt.getThen() = child and child.getNumberOfStmts() = 0 and not exists(stmt.getElse())
-  )
-  or
-  exists(IfStmt stmt, SourceLocation l |
-    stmt.getThen() = child and
-    child.getNumberOfStmts() = 0 and
-    exists(stmt.getElse()) and
-    child.getLocation() = l and
-    l.getStartLine() != l.getEndLine()
-  )
-  or
-  exists(IfStmt stmt | stmt.getElse() = child and child.getNumberOfStmts() = 0)
+/** An uncommented empty statement */
+private EmptyStmt emptyStmt() {
+  not commentedLine(result.getFile(), result.getLocation().getStartLine())
 }
 
-from BlockStmt s
+/** An empty statement or an empty block. */
+Stmt emptyBody() { result = emptyBlock() or result = emptyStmt() }
+
+/**
+ * Empty blocks or empty statements should not occur as immediate children of if-statements or loops.
+ * Empty blocks should not occur within other blocks.
+ */
+predicate blockParent(Stmt empty, string msg) {
+  empty = emptyBody() and
+  (
+    empty.getParent() instanceof IfStmt and
+    msg = "The body of an if statement should not be empty."
+    or
+    empty.getParent() instanceof LoopStmt and msg = "The body of a loop should not be empty."
+    or
+    empty.getParent() instanceof BlockStmt and
+    empty instanceof BlockStmt and
+    msg = "This block should not be empty."
+  )
+}
+
+from Stmt empty, string msg
 where
-  (loopStmtWithEmptyBlock(s) or conditionalWithEmptyBlock(s)) and
-  not exists(CommentBlock c | c.getParent() = s) and
-  not exists(ForStmt fs | fs.getBody() = s and exists(fs.getAnUpdate()))
-select s, "Empty block."
+  empty = emptyBody() and
+  blockParent(empty, msg)
+select empty, msg + " Typographical error or missing code?"
